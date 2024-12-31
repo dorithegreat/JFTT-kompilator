@@ -87,11 +87,6 @@ lex.lex()
 
 # parser
 
-# empty rule for use in later empty productions
-def p_empty(p):
-    'empty :'
-    pass
-
 
 # program_all - the main rule
 # first declare the procedures, than the main function
@@ -253,3 +248,10 @@ def id_tab_pid(p):
 
 def id_tab_num(p):
     'identifier : PID LBR NUM RBR'
+
+# empty rule for use in later empty productions
+def p_empty(p):
+    'empty :'
+    pass
+
+# yacc.yacc(start='program_all')
