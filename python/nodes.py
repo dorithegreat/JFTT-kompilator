@@ -5,9 +5,8 @@ from __future__ import annotations
 # hence the need for implicitly building one if it's necessary to refer to parts of the structure outside of the initial parsing
 
 class Identifier:
-    def __init__(self, name, value):
+    def __init__(self, name):
         self.name = name
-        self.value = value
 
 class IfStatement:
     def __init__(self, condition, commands, else_commands):
@@ -116,3 +115,20 @@ class ArgsDecl:
         
     def add_arg(self, arg):
         self.arguments.append(arg)
+        
+class Args:
+    def __init__(self):
+        self.arguments = []
+
+    def add_arg(self, arg):
+        self.arguments.append(arg)
+        
+class ArrayPosition:
+    def __init__(self, name, position):
+        self.name = name
+        self.position = position
+        
+class Assign:
+    def __init__(self, variable, assignment):
+        self.variable = variable
+        self.assignment = assignment

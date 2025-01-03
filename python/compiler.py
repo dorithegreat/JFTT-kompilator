@@ -18,7 +18,7 @@ tokens = (
     'EQ', 'NEQ', 
     'GT', 'LT', 'GEQ', 'LEQ',
     'COM',
-    'ASSIGN', 'SEMICOLON'
+    'ASSIGN', 'SEMICOLON', 'COMMA'
 )
 
 t_FOR = r'FOR'
@@ -64,8 +64,16 @@ t_MUL = r'\*'
 t_DIV = r'\/'
 t_MOD = r'\%'
 
+t_EQ = r'\='
+t_NEQ = r'\!='
+t_GEQ = r'>='
+t_LEQ = r'<='
+t_LT = r'<'
+t_GT = r'>'
+
 t_ASSIGN = r'\:\='
 t_SEMICOLON = r'\;'
+t_COMMA = r','
 
 t_ignore = ' \t'
 
@@ -85,9 +93,9 @@ def t_error(t):
     print(f'\ninvalid character: {t.value[0]!r}')
     t.lexer.skip(1)
 
-lex.lex()
+# lex.lex()
 
-# parser
+# * parser
 
 
 # program_all - the main rule
@@ -137,7 +145,8 @@ def p_commands_end(p):
 
 # command
 def p_command_assign(p):
-    'command : identifier ASSIGN identifier'
+    'command : identifier ASSIGN expression SEMICOLON'
+    p[0] = nd.Assign(p[1], p[3])
     
 
 def p_command_if_else(p):
@@ -170,9 +179,12 @@ def p_command_proc_call(p):
 
 def p_command_read(p):
     'command : READ identifier SEMICOLON'
+    # TODO change this and WRITE later
+    p[0] = p[2]
 
 def p_command_write(p):
     'command : WRITE value SEMICOLON'
+    p[0] = p[2]
 
 
 # proc_head
@@ -187,12 +199,13 @@ def p_proc_call(p):
 
 # declarations
 def p_declarations_decl_pid(p):
-    '''declarations : declarations ',' PID'''
+    '''declarations : declarations COMMA PID'''
     p[1].add_declaration(p[3])
+    p[0] = p[1]
 
 # declarations , pidentifier [ num : num ]
 def p_declarations_decl_tab(p):
-    '''declarations : declarations ',' PID LBR NUM ':' NUM RBR '''
+    '''declarations : declarations COMMA PID LBR NUM ':' NUM RBR '''
     p[1].add_declaration(nd.Array(p[3], p[5], p[7]))
     p[0] = p[1]
 
@@ -220,6 +233,7 @@ def p_args_decl_ards_pid(p):
 def p_args_decl_ards_tab(p):
     'args_decl : args_decl T PID'
     p[1].add_arg(nd.Array(p[3], None, None))
+    p[0] = p[1]
 
 def p_args_decl_pid(p):
     'args_decl : PID'
@@ -236,9 +250,14 @@ def p_args_decl_tab(p):
 # args
 def p_args_args(p):
     'args : args PID'
+    p[1].add_arg(p[2])
+    p[0] = p[1]
 
 def p_args_pid(p):
     'args : PID'
+    arg = nd.Args()
+    arg.add_arg(p[1])
+    p[0] = p[1]
 
 # expression - assignment to variables
 def p_expr_value(p):
@@ -300,19 +319,59 @@ def p_value_id(p):
     p[0] = p[1]
 
 # identifier
-def id_pid(p):
+def p_id_pid(p):
     'identifier : PID'
     p[0] = nd.Identifier(p[1])
 
-def id_tab_pid(p):
+def p_id_tab_pid(p):
     'identifier : PID LBR PID RBR'
+    p[0] = nd.ArrayPosition(p[1], p[3])
 
-def id_tab_num(p):
+def p_id_tab_num(p):
     'identifier : PID LBR NUM RBR'
+    p[0] = nd.ArrayPosition(p[1], p[3])
 
 # empty rule for use in later empty productions
 def p_empty(p):
     'empty :'
     pass
 
+def p_error(p):
+    if p != None:
+        print('\nsyntax error: ', p.value)
+    else:
+        print(f'syntax error')
+
 # yacc.yacc(start='program_all')
+
+
+import logging
+logging.basicConfig(
+    level = logging.DEBUG,
+    filename = "parselog.txt",
+    filemode = "w",
+    format = "%(filename)10s:%(lineno)4d:%(message)s"
+)
+log = logging.getLogger()
+
+lex.lex(debug=True,debuglog=log)
+yacc.yacc(debug=True,debuglog=log)
+
+text = '''
+PROGRAM IS
+	n, p
+BEGIN
+    READ n;
+    REPEAT
+	p:=n/2;
+	p:=2*p;
+	IF n>p THEN 
+	    WRITE 1;
+	ELSE 
+	    WRITE 0;
+	ENDIF
+	n:=n/2;
+    UNTIL n=0;
+END
+'''
+yacc.parse(text, debug=log)
