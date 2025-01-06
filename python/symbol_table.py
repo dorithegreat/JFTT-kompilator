@@ -19,14 +19,16 @@ class Variable:
 
 class SymbolTable(dict):
     
-    # arbitrarily set at 10
-    # memory cells 0-9 will be used as registers
+    # arbitrarily set at 10 for now
+    # TODO should probably be set at maximum number of arguments of any procedure + 1
+    # but not less than x
+    
     
     # memory is virtually infinite so I will not be caring about optimizing its use
     first_available_memory = 10
     
     def __init__(self):
-        super.__init__()
+        super().__init__()
         
     def add_variable(self, name):
         if name in self:
@@ -48,4 +50,10 @@ class SymbolTable(dict):
         
     def add_const(self, value):
         pass
+    
+    def get_variable(self, var):
+        if var in self:
+            return self.get(var).memory_location
+        else:
+            raise Exception("Referring to an unallocated variable: ", var)
         

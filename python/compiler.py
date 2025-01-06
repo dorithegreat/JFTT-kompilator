@@ -2,6 +2,7 @@ import ply.yacc as yacc
 import ply.lex as lex
 
 import nodes as nd
+from code_generator import CodeGenerator
 
 #* Token declarations
 
@@ -101,12 +102,13 @@ def t_error(t):
 
 # * parser
 
+tree = None
 
 # program_all - the main rule
 # first declare the procedures, than the main function
 def p_program_all(p):
     'program_all : procedures main'
-    p[0] = nd.Program(p[1], p[2])
+    tree = nd.Program(p[1], p[2])
 
 
 # procedures - declaring procedures other than main
@@ -379,3 +381,8 @@ BEGIN
 END
 '''
 yacc.parse(text, debug=log)
+
+codegen = CodeGenerator(tree)
+
+for line in codegen.code:
+    print(line)

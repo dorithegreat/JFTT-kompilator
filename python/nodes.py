@@ -32,7 +32,7 @@ class ArrayPosition:
 class Assign:
     def __init__(self, variable, assignment):
         self.variable = variable
-        self.assignment = assignment
+        self.assignment : Expression = assignment
 
 class Commands:
     def __init__(self):
@@ -89,8 +89,8 @@ class IfStatement:
 class Main:
     def __init__(self, declarations, commands):
         # declarations may be None if the program does not define any variables at all~
-        self.declarations = declarations
-        self.commands = commands
+        self.declarations : Declarations = declarations
+        self.commands : Commands = commands
 
 class ProcCall:
     def __init__(self, pid, arguments):
@@ -104,9 +104,9 @@ class ProcHead:
 
 class Procedure:
     def __init__(self, proc_head, declaration, commands):
-        self.proc_head = proc_head
-        self.declaration = declaration
-        self.commands = commands
+        self.proc_head : ProcHead = proc_head
+        self.declaration : Declarations = declaration
+        self.commands : Commands = commands
 
 class Procedures:
     def __init__(self):
