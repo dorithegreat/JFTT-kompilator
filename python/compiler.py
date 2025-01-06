@@ -3,7 +3,9 @@ import ply.lex as lex
 
 import nodes as nd
 
-# Token declarations
+#* Token declarations
+
+# massive amount of tokens because I don't like literals
 tokens = (
     'LBR', 'RBR', 'LPAR', 'RPAR',
     'FOR', 'FROM', 'TO', 'DOWNTO', 'ENDFOR',
@@ -20,6 +22,8 @@ tokens = (
     'COM',
     'ASSIGN', 'SEMICOLON', 'COMMA'
 )
+
+#* token definitions
 
 t_FOR = r'FOR'
 t_FROM = r'FROM'
