@@ -122,6 +122,11 @@ class Program:
         self.procedures = procedures
         self.main = main
 
+class Read:
+    def __init__(self, variable : Identifier):
+        self.variable = variable
+
+
 class RepeatUntil:
     def __init__(self, commands, condition):
         self.condition = condition
@@ -131,3 +136,7 @@ class WhileLoop:
     def __init__(self, condition, commands):
         self.condition = condition
         self.commands = commands
+        
+class Write:
+    def __init__(self, value):
+        self.value = value

@@ -108,7 +108,7 @@ tree = None
 # first declare the procedures, than the main function
 def p_program_all(p):
     'program_all : procedures main'
-    tree = nd.Program(p[1], p[2])
+    p[0] = nd.Program(p[1], p[2])
 
 
 # procedures - declaring procedures other than main
@@ -185,12 +185,11 @@ def p_command_proc_call(p):
 
 def p_command_read(p):
     'command : READ identifier SEMICOLON'
-    # TODO change this and WRITE later
-    p[0] = p[2]
+    p[0] = nd.Read(p[2])
 
 def p_command_write(p):
     'command : WRITE value SEMICOLON'
-    p[0] = p[2]
+    p[0] = nd.Write(p[2])
 
 
 # proc_head
@@ -361,7 +360,7 @@ logging.basicConfig(
 log = logging.getLogger()
 
 lex.lex(debug=True,debuglog=log)
-yacc.yacc(debug=True,debuglog=log)
+parser = yacc.yacc(debug=True,debuglog=log)
 
 text = '''
 PROGRAM IS
@@ -380,9 +379,10 @@ BEGIN
     UNTIL n=0;
 END
 '''
-yacc.parse(text, debug=log)
+tree = parser.parse(text, debug=log)
 
 codegen = CodeGenerator(tree)
+codegen.generate()
 
 for line in codegen.code:
     print(line)
