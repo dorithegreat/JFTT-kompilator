@@ -367,7 +367,6 @@ PROGRAM IS
 	n, p
 BEGIN
     READ n;
-    REPEAT
 	p:=n/2;
 	p:=2*p;
 	IF n>p THEN 
@@ -376,7 +375,6 @@ BEGIN
 	    WRITE 0;
 	ENDIF
 	n:=n/2;
-    UNTIL n=0;
 END
 '''
 tree = parser.parse(text, debug=log)

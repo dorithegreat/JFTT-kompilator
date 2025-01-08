@@ -35,8 +35,9 @@ class CodeGenerator:
         self.procedures.setdefault(procedure_name, linenum)
         
         # TODO do something with arguments
-        # arguments will be in the  first few memory cells starting with 1, before variables
-        # will appear in order of declaration
+        # # arguments will be in the  first few memory cells starting with 1, before variables
+        # # will appear in order of declaration
+        # ! arguments need to be passed by reference, not by copying and restoring
         
         # allocating memory for variables
         for var in procedure.declaration.declarations:
@@ -56,17 +57,18 @@ class CodeGenerator:
             self.symbols.add_variable(var)
         pass
     
-        linenum = self.generate_commands(main.commands, linenum)
+        linenum = self.generate_commands(main.commands)
     
     # TODO change linenum to be the number of lines added
     # not whatever this mess currently is
-    def generate_commands(self, commands : nd.Commands, linenum):
+    def generate_commands(self, commands : nd.Commands):
+        linenum = 0
         inner_code = []
         
         for comm in commands.commands:
             if type(comm) == nd.Assign:
-                inner_code.append("LOAD ", self.symbols.get_variable(comm.variable))
-                linenum += 1;
+                inner_code.append(f"LOAD {self.symbols.get_variable(comm.variable.name)}")
+                linenum = linenum + 1;
                 linenum = self.generate_expression(comm.assignment, linenum)
                 
                 
@@ -96,8 +98,9 @@ class CodeGenerator:
         return linenum, inner_code
                 
     
-    def generate_ifstatement(self, ifstatement : nd.IfStatement, linenum):
-        inner_code = []
+    def generate_ifstatement(self, ifstatement : nd.IfStatement):
+        inner_code = list()
+        linenum = 0
         
         # TODO optimize for unreachable code blocks
         # like if 1 > 2 
@@ -114,6 +117,30 @@ class CodeGenerator:
         # I think? it might not have much significance at all
         # it's also possible to do either one first based on which code is shorter
         #? damn what a mess
+        
+        #* Expressions should definitely jump over to else, not if, because of use of conditions in other code blocks
+        # as in, loops
+        
+        lines_if, code_if = self.generate_commands(ifstatement.commands)
+        
+        if ifstatement.else_commands == None:
+            lines_else, code_else = self.generate_commands(ifstatement.else_commands)
+        else:
+            lines_else = 0
+            code_else = []
+        
+        # if the condition is true don't jump, if it's false jump right after if block
+        lines_cond, code_cond = self.generate_condition(ifstatement.condition, 0, linenum + lines_if)
+        
+        
+        inner_code += code_cond
+        linenum += lines_cond
+        inner_code += code_if
+        linenum += lines_if
+        inner_code.append(f"JUMP {linenum + lines_else}")
+        linenum += 1
+        inner_code += code_else
+        linenum += lines_else
         
         # line_if, code_if = self.generate_commands(ifstatement.commands, linenum)
         
@@ -178,10 +205,15 @@ class CodeGenerator:
             
             pass
         
-    def generate_condition(self, condition : nd.Condition, linenum, jump_if_true, jump_if_false):
+    def generate_condition(self, condition : nd.Condition, jump_if_true, jump_if_false):
+        # counter of lines added by this function
+        linenum = 0
+        
         # TODO optimize for already known conditions like 1 = 2
         
         # TODO make it work with arrays, variables and constants
+        
+        # TODO rewrite so the jumps are correct (not always to true)
         
         if condition.operator == "EQ":
             self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
@@ -189,13 +221,14 @@ class CodeGenerator:
             self.code.append(f"JZERO {jump_if_true}")
             # should I include jumping if false?
             
+            # this could technically be just return 3 but I'll leave it like this for if I change something again
             return linenum + 3
         
         elif condition.operator == "NEQ":
             self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
             self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
             
-            # if it's either positive and negative then the condition is true
+            # if it's either positive or negative then the condition is true
             # TODO do it smarter
             self.code.append(f"JPOS {jump_if_true}")
             self.code.append(f"JNEG {jump_if_true}")
