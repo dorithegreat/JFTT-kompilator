@@ -59,21 +59,30 @@ class CodeGenerator:
     
         linenum = self.generate_commands(main.commands)
     
-    # TODO change linenum to be the number of lines added
-    # not whatever this mess currently is
+    
     def generate_commands(self, commands : nd.Commands):
         linenum = 0
         inner_code = []
         
         for comm in commands.commands:
             if type(comm) == nd.Assign:
-                inner_code.append(f"LOAD {self.symbols.get_variable(comm.variable.name)}")
-                linenum = linenum + 1;
-                linenum = self.generate_expression(comm.assignment, linenum)
+                
+                #? can't load the assigned variable here bacause it will immediately be overriden in the expression generation
+                # inner_code.append(f"LOAD {self.symbols.get_variable(comm.variable.name)}")
+                # linenum = linenum + 1;
+                
+                return_linenum, return_code = self.generate_expression(comm.assignment)
+                inner_code += return_code
+                linenum += return_linenum
+                
+                # store the calculated expression in the right variable
+                #? this will always be a variable and not a constant, as you can't assign value to a constant
+                inner_code.append(f"STORE {self.symbols.get_variable(comm.variable.name)}")
+                linenum += 1
                 
                 
             elif type(comm) == nd.IfStatement:
-                linenum, c = self.generate_ifstatement(comm, linenum)
+                linenum, c = self.generate_ifstatement(comm)
                 inner_code += c
             elif type(comm) == nd.WhileLoop:
                 linenum, c = self.generate_while(comm, linenum)
@@ -88,12 +97,28 @@ class CodeGenerator:
             elif type(comm) == nd.ProcCall:
                 pass
             elif type(comm) == nd.Read:
+                # you cannot read a constant so there's need for the same conditions as in WRITE
+                # TODO you can read an array though
                 inner_code.append(f"GET {self.symbols.get_variable(comm.variable.name)}")
                 linenum += 1
                 
             elif type(comm) == nd.Write:
-                inner_code.append("PUT " + self.symbols.get_variable(comm.value))
-                linenum += 1
+                if isinstance(comm.value, nd.Identifier):
+                    inner_code.append(f"PUT {self.symbols.get_variable(comm.value)}")
+                    linenum += 1
+                elif isinstance(comm.value, nd.Array):
+                    pass
+                else:
+                    if self.symbols.is_declared(comm.value):
+                        inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
+                        linenum += 1
+                    else:
+                        self.symbols.add_const(comm.value)
+                        inner_code.append(f"SET {comm.value}")
+                        inner_code.append(f"STORE {self.symbols.get_const(comm.value)}")
+                        inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
+                    
+                
         
         return linenum, inner_code
                 
@@ -105,9 +130,8 @@ class CodeGenerator:
         # TODO optimize for unreachable code blocks
         # like if 1 > 2 
         
-        # TODO evaluate condition
         
-        #! THIS IS ALL TRASH
+        #THIS IS (not anymore) ALL TRASH
         # if block should come first because if else doesn't exist there's nothing to jump to
         # wait no
         # in any case, there should be a jump to skip if, if the condition is false
@@ -123,7 +147,7 @@ class CodeGenerator:
         
         lines_if, code_if = self.generate_commands(ifstatement.commands)
         
-        if ifstatement.else_commands == None:
+        if ifstatement.else_commands is not None:
             lines_else, code_else = self.generate_commands(ifstatement.else_commands)
         else:
             lines_else = 0
@@ -163,44 +187,91 @@ class CodeGenerator:
     def generate_repeat_until(self, repeat : nd.RepeatUntil, lineneum):
         pass
     
-    def generate_expression(self, expression : nd.Expression, linenum):
+    def generate_expression(self, expression : nd.Expression):
+        linenum = 0
+        inner_code = []
         
         # TODO if both are numbers just calculate it
         
-        # TODO include code for constants
+        
+        
+        # // I believe it's safe to directly append these lines to code
+        # // as it seems to be illegal to use an expression in a condition
+        # // I might change it to use inner_code to be consistent with other functions
+        # nope, expressions can be invoked in generate_commands, which means that they must return their own code
         if expression.operator == "ADD":\
-            # perform addition
-            self.code.append("LOAD ", self.symbols.get_variable(expression.value1))
-            self.code.append("ADD ", self.symbols.get_variable(expression.value2))
+            
+            if isinstance(expression.value1, nd.Identifier):
+                inner_code.append(f"LOAD  {self.symbols.get_variable(expression.value1.name)}")
+            elif isinstance(expression.value1, nd.Array):
+                pass
+            else:
+                if self.symbols.is_declared(expression.value1):
+                    inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
+                    linenum += 1
+                else:
+                    self.symbols.add_const(expression.value1)
+                    inner_code.append(f"SET {expression.value1}")
+                    inner_code.append(f"STORE {self.symbols.get_const(expression.value1)}")
+                    # I *think* there's no need to load again afterwards because it stays in the accumulator
+                    linenum += 2
+                
+            
+            if isinstance(expression.value2, nd.Identifier):
+                inner_code.append(f"ADD  {self.symbols.get_variable(expression.value2.name)}")
+            elif isinstance(expression.value2, nd.Array):
+                pass
+            else:
+                if self.symbols.is_declared(expression.value2):
+                    inner_code.append(f"ADD  {self.symbols.get_const(expression.value2)}")
+                    linenum += 1
+                else:
+                    self.symbols.add_const(expression.value2)
+                    inner_code.append(f"SET {expression.value2}")
+                    inner_code.append(f"STORE {self.symbols.get_const(expression.value2)}")
+                    inner_code.append(f"ADD {self.symbols.get_const(expression.value2)}")
+                    linenum += 3
+                    
+            
+            
+            #* I don't think it's necessary to store the result anywhere
+            #* It will immediately get assigned to whichever variable right after returning from this function
             # returns result to 1
             # I assume the function that called this will do something with it
             # this will likely need to get optimized for not having consecutive stores and loads on the same register
-            self.code.append("STORE 1")
+            # inner_code.append("STORE 1")
+            # linenum += 1
             
-            #! important to change if I ever change the code above
-            # for that reason I should change it so it's not this easy to mess up
-            # but also. it works
-            return linenum + 3
+            return linenum, inner_code
         
-        if expression.operator == "SUB":
-            self.code.append("LOAD ", self.symbols.get_variable(expression.value1))
-            self.code.append("SUB ", self.symbols.get_variable(expression.value2))
-            self.code.append("STORE 1")
+        elif expression.operator == "SUB":
+            if isinstance(expression.value1, nd.Identifier):
+                inner_code.append(f"LOAD  {self.symbols.get_variable(expression.value1.name)}")
+            else:
+                inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
+                
+            linenum += 1
             
-            return linenum + 3
+            if isinstance(expression.value2, nd.Identifier):
+                inner_code.append(f"SUB  {self.symbols.get_variable(expression.value2.name)}")
+            else:
+                inner_code.append(f"SUB  {self.symbols.get_const(expression.value2)}")
+            linenum += 1
             
-            # perform subtraction
-            pass
+            # inner_code.append("STORE 1")
+            # linenum += 1
+            
+            return linenum, inner_code
         
-        if expression.operator == "MUL":
+        elif expression.operator == "MUL":
             # self.multiplication()
             pass
         
-        if expression.operator == "DIV":
+        elif expression.operator == "DIV":
             # self.division()
             pass
         
-        if expression.operator == "MOD":
+        elif expression.operator == "MOD":
             # self.modulo()
             
             pass

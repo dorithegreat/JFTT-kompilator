@@ -16,6 +16,11 @@ class Variable:
     def __init__(self, name, memory_location):
         self.name = name
         self.memory_location = memory_location
+        
+class Constant:
+    def __init__(self, value, memory_location):
+        self.value = value
+        self.memory_location = memory_location
 
 class SymbolTable(dict):
     
@@ -26,6 +31,8 @@ class SymbolTable(dict):
     
     # memory is virtually infinite so I will not be caring about optimizing its use
     first_available_memory = 10
+    
+    consts = {}
     
     def __init__(self):
         super().__init__()
@@ -49,7 +56,13 @@ class SymbolTable(dict):
         self.first_available_memory += last_index - first_index + 1
         
     def add_const(self, value):
-        pass
+        if value in self.consts:
+            # it's not illegal to try to add the same constant twice
+            # but it should not be allocated again
+            return
+        
+        self.consts.setdefault(value, Constant(value, self.first_available_memory))
+        self.first_available_memory += 1
     
     def get_variable(self, var):
         if var in self:
@@ -57,3 +70,16 @@ class SymbolTable(dict):
         else:
             raise Exception("Referring to an unallocated variable: ", var)
         
+    def get_const(self, const):
+        if const in self.consts:
+            return self.consts.get(const).memory_location
+        # else:
+        #     # if it's not already in the list of consts just allocate it
+        #     self.add_const(const)
+        #     return self.get(const).memory_location
+        
+    def is_declared(self, const):
+        if const in self.consts:
+            return True
+        else:
+            return False

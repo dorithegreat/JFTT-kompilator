@@ -367,8 +367,8 @@ PROGRAM IS
 	n, p
 BEGIN
     READ n;
-	p:=n/2;
-	p:=2*p;
+	p:=n+2;
+	p:=2-p;
 	IF n>p THEN 
 	    WRITE 1;
 	ELSE 
