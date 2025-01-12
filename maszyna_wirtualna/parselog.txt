@@ -1,0 +1,493 @@
+    lex.py: 924:lex: tokens   = ('LBR', 'RBR', 'LPAR', 'RPAR', 'FOR', 'FROM', 'TO', 'DOWNTO', 'ENDFOR', 'PROCEDURE', 'IS', 'BEGIN', 'END', 'PROGRAM', 'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'DO', 'ENDWHILE', 'REPEAT', 'UNTIL', 'READ', 'WRITE', 'PID', 'NUM', 'T', 'ADD', 'SUB', 'MUL', 'DIV', 'MOD', 'EQ', 'NEQ', 'GT', 'LT', 'GEQ', 'LEQ', 'COM', 'ASSIGN', 'SEMICOLON', 'COMMA')
+    lex.py: 925:lex: literals = ''
+    lex.py: 926:lex: states   = {'INITIAL': 'inclusive'}
+    lex.py: 953:lex: Adding rule t_NUM -> '[0-9]+' (state 'INITIAL')
+    lex.py: 953:lex: Adding rule t_newline -> '\n+' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_PROCEDURE -> 'PROCEDURE' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ENDWHILE -> 'ENDWHILE' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_PROGRAM -> 'PROGRAM' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_PID -> '[_a-z]+' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_DOWNTO -> 'DOWNTO' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ENDFOR -> 'ENDFOR' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_REPEAT -> 'REPEAT' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_BEGIN -> 'BEGIN' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ENDIF -> 'ENDIF' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_WHILE -> 'WHILE' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_UNTIL -> 'UNTIL' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_WRITE -> 'WRITE' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_FROM -> 'FROM' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_THEN -> 'THEN' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ELSE -> 'ELSE' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_READ -> 'READ' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_COM -> '\#.*' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ASSIGN -> '\:\=' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_FOR -> 'FOR' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_END -> 'END' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_NEQ -> '\!=' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_TO -> 'TO' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_IS -> 'IS' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_IF -> 'IF' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_DO -> 'DO' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_LBR -> '\[' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_RBR -> '\]' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_LPAR -> '\(' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_RPAR -> '\)' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_ADD -> '\+' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_MUL -> '\*' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_DIV -> '\/' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_MOD -> '\%' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_EQ -> '\=' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_GEQ -> '>=' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_LEQ -> '<=' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_SEMICOLON -> '\;' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_T -> 'T' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_SUB -> '-' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_LT -> '<' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_GT -> '>' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_COMMA -> ',' (state 'INITIAL')
+    lex.py: 966:lex: ==== MASTER REGEXS FOLLOW ====
+    lex.py: 975:lex: state 'INITIAL' : regex[0] = '(?P<t_NUM>[0-9]+)|(?P<t_newline>\n+)|(?P<t_PROCEDURE>PROCEDURE)|(?P<t_ENDWHILE>ENDWHILE)|(?P<t_PROGRAM>PROGRAM)|(?P<t_PID>[_a-z]+)|(?P<t_DOWNTO>DOWNTO)|(?P<t_ENDFOR>ENDFOR)|(?P<t_REPEAT>REPEAT)|(?P<t_BEGIN>BEGIN)|(?P<t_ENDIF>ENDIF)|(?P<t_WHILE>WHILE)|(?P<t_UNTIL>UNTIL)|(?P<t_WRITE>WRITE)|(?P<t_FROM>FROM)|(?P<t_THEN>THEN)|(?P<t_ELSE>ELSE)|(?P<t_READ>READ)|(?P<t_COM>\#.*)|(?P<t_ASSIGN>\:\=)|(?P<t_FOR>FOR)|(?P<t_END>END)|(?P<t_NEQ>\!=)|(?P<t_TO>TO)|(?P<t_IS>IS)|(?P<t_IF>IF)|(?P<t_DO>DO)|(?P<t_LBR>\[)|(?P<t_RBR>\])|(?P<t_LPAR>\()|(?P<t_RPAR>\))|(?P<t_ADD>\+)|(?P<t_MUL>\*)|(?P<t_DIV>\/)|(?P<t_MOD>\%)|(?P<t_EQ>\=)|(?P<t_GEQ>>=)|(?P<t_LEQ><=)|(?P<t_SEMICOLON>\;)|(?P<t_T>T)|(?P<t_SUB>-)|(?P<t_LT><)|(?P<t_GT>>)|(?P<t_COMMA>,)'
+   yacc.py: 362:PLY: PARSE DEBUG START
+   yacc.py: 410:
+   yacc.py: 411:State  : 0
+   yacc.py: 434:Stack  : . LexToken(PROGRAM,'PROGRAM',2,1)
+   yacc.py: 473:Action : Reduce rule [empty -> <empty>] with [] and goto state 3
+   yacc.py: 548:Result : <NoneType @ 0xa3f8a0> (None)
+   yacc.py: 410:
+   yacc.py: 411:State  : 3
+   yacc.py: 434:Stack  : empty . LexToken(PROGRAM,'PROGRAM',2,1)
+   yacc.py: 469:Action : Reduce rule [procedures -> empty] with [None] and goto state 2
+   yacc.py: 506:Result : <Procedures @ 0x7f73bc8df5c0> (<nodes.Procedures object at 0x7f73bc8df5 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 2
+   yacc.py: 434:Stack  : procedures . LexToken(PROGRAM,'PROGRAM',2,1)
+   yacc.py: 445:Action : Shift and goto state 6
+   yacc.py: 410:
+   yacc.py: 411:State  : 6
+   yacc.py: 434:Stack  : procedures PROGRAM . LexToken(IS,'IS',2,9)
+   yacc.py: 445:Action : Shift and goto state 9
+   yacc.py: 410:
+   yacc.py: 411:State  : 9
+   yacc.py: 434:Stack  : procedures PROGRAM IS . LexToken(PID,'n',3,13)
+   yacc.py: 445:Action : Shift and goto state 14
+   yacc.py: 410:
+   yacc.py: 411:State  : 14
+   yacc.py: 434:Stack  : procedures PROGRAM IS PID . LexToken(COMMA,',',3,14)
+   yacc.py: 469:Action : Reduce rule [declarations -> PID] with ['n'] and goto state 12
+   yacc.py: 506:Result : <Declarations @ 0x7f73bcba99a0> (<nodes.Declarations object at 0x7f73bcba ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 12
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',3,14)
+   yacc.py: 445:Action : Shift and goto state 21
+   yacc.py: 410:
+   yacc.py: 411:State  : 21
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'p',3,16)
+   yacc.py: 445:Action : Shift and goto state 41
+   yacc.py: 410:
+   yacc.py: 411:State  : 41
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(BEGIN,'BEGIN',4,18)
+   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID] with [<Declarations @ 0x7f73bcba99a0>,',','p'] and goto state 12
+   yacc.py: 506:Result : <Declarations @ 0x7f73bcba99a0> (<nodes.Declarations object at 0x7f73bcba ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 12
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(BEGIN,'BEGIN',4,18)
+   yacc.py: 445:Action : Shift and goto state 20
+   yacc.py: 410:
+   yacc.py: 411:State  : 20
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN . LexToken(READ,'READ',5,28)
+   yacc.py: 445:Action : Shift and goto state 31
+   yacc.py: 410:
+   yacc.py: 411:State  : 31
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ . LexToken(PID,'n',5,33)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ PID . LexToken(SEMICOLON,';',5,34)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 55
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8df680> (<nodes.Identifier object at 0x7f73bc8df6 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 55
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ identifier . LexToken(SEMICOLON,';',5,34)
+   yacc.py: 445:Action : Shift and goto state 79
+   yacc.py: 410:
+   yacc.py: 411:State  : 79
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ identifier SEMICOLON . LexToken(REPEAT,'REPEAT',6,40)
+   yacc.py: 469:Action : Reduce rule [command -> READ identifier SEMICOLON] with ['READ',<Identifier @ 0x7f73bc8df680>,';'] and goto state 23
+   yacc.py: 506:Result : <Read @ 0x7f73bc8dfb90> (<nodes.Read object at 0x7f73bc8dfb90>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 23
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN command . LexToken(REPEAT,'REPEAT',6,40)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Read @ 0x7f73bc8dfb90>] and goto state 40
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfb00> (<nodes.Commands object at 0x7f73bc8dfb00 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 40
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(REPEAT,'REPEAT',6,40)
+   yacc.py: 445:Action : Shift and goto state 27
+   yacc.py: 410:
+   yacc.py: 411:State  : 27
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT . LexToken(PID,'p',7,48)
+   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 410:
+   yacc.py: 411:State  : 29
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT PID . LexToken(ASSIGN,':=',7,49)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['p'] and goto state 24
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8df9b0> (<nodes.Identifier object at 0x7f73bc8df9 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 24
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier . LexToken(ASSIGN,':=',7,49)
+   yacc.py: 445:Action : Shift and goto state 44
+   yacc.py: 410:
+   yacc.py: 411:State  : 44
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN . LexToken(PID,'n',7,51)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN PID . LexToken(DIV,'/',7,52)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8df9e0> (<nodes.Identifier object at 0x7f73bc8df9 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN identifier . LexToken(DIV,'/',7,52)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bc8df9e0>] and goto state 64
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8df9e0> (<nodes.Identifier object at 0x7f73bc8df9 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 64
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN value . LexToken(DIV,'/',7,52)
+   yacc.py: 445:Action : Shift and goto state 88
+   yacc.py: 410:
+   yacc.py: 411:State  : 88
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN value DIV . LexToken(NUM,2,7,53)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN value DIV NUM . LexToken(SEMICOLON,';',7,54)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [2] and goto state 109
+   yacc.py: 506:Result : <int @ 0xb359c8> (2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 109
+   yacc.py: 430:Defaulted state 109: Reduce using 35
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN value DIV value . LexToken(SEMICOLON,';',7,54)
+   yacc.py: 469:Action : Reduce rule [expression -> value DIV value] with [<Identifier @ 0x7f73bc8df9e0>,'/',2] and goto state 63
+   yacc.py: 506:Result : <Expression @ 0x7f73bc8dfd70> (<nodes.Expression object at 0x7f73bc8dfd ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 63
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN expression . LexToken(SEMICOLON,';',7,54)
+   yacc.py: 445:Action : Shift and goto state 84
+   yacc.py: 410:
+   yacc.py: 411:State  : 84
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT identifier ASSIGN expression SEMICOLON . LexToken(PID,'p',8,57)
+   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x7f73bc8df9b0>,':=',<Expression @ 0x7f73bc8dfd70>,';'] and goto state 23
+   yacc.py: 506:Result : <Assign @ 0x7f73bc8dfd10> (<nodes.Assign object at 0x7f73bc8dfd10>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 23
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT command . LexToken(PID,'p',8,57)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Assign @ 0x7f73bc8dfd10>] and goto state 51
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfec0> (<nodes.Commands object at 0x7f73bc8dfec0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 51
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands . LexToken(PID,'p',8,57)
+   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 410:
+   yacc.py: 411:State  : 29
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands PID . LexToken(ASSIGN,':=',8,58)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['p'] and goto state 24
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfe00> (<nodes.Identifier object at 0x7f73bc8dfe ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 24
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier . LexToken(ASSIGN,':=',8,58)
+   yacc.py: 445:Action : Shift and goto state 44
+   yacc.py: 410:
+   yacc.py: 411:State  : 44
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN . LexToken(NUM,2,8,60)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN NUM . LexToken(MUL,'*',8,61)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [2] and goto state 64
+   yacc.py: 506:Result : <int @ 0xb359c8> (2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 64
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value . LexToken(MUL,'*',8,61)
+   yacc.py: 445:Action : Shift and goto state 87
+   yacc.py: 410:
+   yacc.py: 411:State  : 87
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value MUL . LexToken(PID,'p',8,62)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value MUL PID . LexToken(SEMICOLON,';',8,63)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['p'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfef0> (<nodes.Identifier object at 0x7f73bc8dfe ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value MUL identifier . LexToken(SEMICOLON,';',8,63)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bc8dfef0>] and goto state 108
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfef0> (<nodes.Identifier object at 0x7f73bc8dfe ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 108
+   yacc.py: 430:Defaulted state 108: Reduce using 34
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value MUL value . LexToken(SEMICOLON,';',8,63)
+   yacc.py: 469:Action : Reduce rule [expression -> value MUL value] with [2,'*',<Identifier @ 0x7f73bc8dfef0>] and goto state 63
+   yacc.py: 506:Result : <Expression @ 0x7f73bc8dfe30> (<nodes.Expression object at 0x7f73bc8dfe ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 63
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN expression . LexToken(SEMICOLON,';',8,63)
+   yacc.py: 445:Action : Shift and goto state 84
+   yacc.py: 410:
+   yacc.py: 411:State  : 84
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN expression SEMICOLON . LexToken(IF,'IF',9,66)
+   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x7f73bc8dfe00>,':=',<Expression @ 0x7f73bc8dfe30>,';'] and goto state 43
+   yacc.py: 506:Result : <Assign @ 0x7f73bc8dfce0> (<nodes.Assign object at 0x7f73bc8dfce0>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 43
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands command . LexToken(IF,'IF',9,66)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x7f73bc8dfec0>,<Assign @ 0x7f73bc8dfce0>] and goto state 51
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfec0> (<nodes.Commands object at 0x7f73bc8dfec0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 51
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands . LexToken(IF,'IF',9,66)
+   yacc.py: 445:Action : Shift and goto state 25
+   yacc.py: 410:
+   yacc.py: 411:State  : 25
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF . LexToken(PID,'n',9,69)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF PID . LexToken(GT,'>',9,70)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bca3d2e0> (<nodes.Identifier object at 0x7f73bca3d2 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF identifier . LexToken(GT,'>',9,70)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bca3d2e0>] and goto state 46
+   yacc.py: 506:Result : <Identifier @ 0x7f73bca3d2e0> (<nodes.Identifier object at 0x7f73bca3d2 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 46
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF value . LexToken(GT,'>',9,70)
+   yacc.py: 445:Action : Shift and goto state 68
+   yacc.py: 410:
+   yacc.py: 411:State  : 68
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF value GT . LexToken(PID,'p',9,71)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF value GT PID . LexToken(THEN,'THEN',9,73)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['p'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dffe0> (<nodes.Identifier object at 0x7f73bc8dff ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF value GT identifier . LexToken(THEN,'THEN',9,73)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bc8dffe0>] and goto state 93
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dffe0> (<nodes.Identifier object at 0x7f73bc8dff ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 93
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF value GT value . LexToken(THEN,'THEN',9,73)
+   yacc.py: 469:Action : Reduce rule [condition -> value GT value] with [<Identifier @ 0x7f73bca3d2e0>,'>',<Identifier @ 0x7f73bc8dffe0>] and goto state 45
+   yacc.py: 506:Result : <Condition @ 0x7f73bc8dfcb0> (<nodes.Condition object at 0x7f73bc8dfcb ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 45
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition . LexToken(THEN,'THEN',9,73)
+   yacc.py: 445:Action : Shift and goto state 65
+   yacc.py: 410:
+   yacc.py: 411:State  : 65
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN . LexToken(WRITE,'WRITE',10,84)
+   yacc.py: 445:Action : Shift and goto state 32
+   yacc.py: 410:
+   yacc.py: 411:State  : 32
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN WRITE . LexToken(NUM,1,10,90)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN WRITE NUM . LexToken(SEMICOLON,';',10,91)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [1] and goto state 56
+   yacc.py: 506:Result : <int @ 0xb359a8> (1)
+   yacc.py: 410:
+   yacc.py: 411:State  : 56
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN WRITE value . LexToken(SEMICOLON,';',10,91)
+   yacc.py: 445:Action : Shift and goto state 80
+   yacc.py: 410:
+   yacc.py: 411:State  : 80
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN WRITE value SEMICOLON . LexToken(ELSE,'ELSE',11,94)
+   yacc.py: 469:Action : Reduce rule [command -> WRITE value SEMICOLON] with ['WRITE',1,';'] and goto state 23
+   yacc.py: 506:Result : <Write @ 0x7f73bc9515e0> (<nodes.Write object at 0x7f73bc9515e0>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 23
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN command . LexToken(ELSE,'ELSE',11,94)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Write @ 0x7f73bc9515e0>] and goto state 90
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dff20> (<nodes.Commands object at 0x7f73bc8dff20 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 90
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands . LexToken(ELSE,'ELSE',11,94)
+   yacc.py: 445:Action : Shift and goto state 111
+   yacc.py: 410:
+   yacc.py: 411:State  : 111
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE . LexToken(WRITE,'WRITE',12,105)
+   yacc.py: 445:Action : Shift and goto state 32
+   yacc.py: 410:
+   yacc.py: 411:State  : 32
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE WRITE . LexToken(NUM,0,12,111)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE WRITE NUM . LexToken(SEMICOLON,';',12,112)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [0] and goto state 56
+   yacc.py: 506:Result : <int @ 0xb35988> (0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 56
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE WRITE value . LexToken(SEMICOLON,';',12,112)
+   yacc.py: 445:Action : Shift and goto state 80
+   yacc.py: 410:
+   yacc.py: 411:State  : 80
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE WRITE value SEMICOLON . LexToken(ENDIF,'ENDIF',13,115)
+   yacc.py: 469:Action : Reduce rule [command -> WRITE value SEMICOLON] with ['WRITE',0,';'] and goto state 23
+   yacc.py: 506:Result : <Write @ 0x7f73bc9500b0> (<nodes.Write object at 0x7f73bc9500b0>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 23
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE command . LexToken(ENDIF,'ENDIF',13,115)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Write @ 0x7f73bc9500b0>] and goto state 119
+   yacc.py: 506:Result : <Commands @ 0x7f73bc9515b0> (<nodes.Commands object at 0x7f73bc9515b0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 119
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE commands . LexToken(ENDIF,'ENDIF',13,115)
+   yacc.py: 445:Action : Shift and goto state 123
+   yacc.py: 410:
+   yacc.py: 411:State  : 123
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands IF condition THEN commands ELSE commands ENDIF . LexToken(PID,'n',14,122)
+   yacc.py: 469:Action : Reduce rule [command -> IF condition THEN commands ELSE commands ENDIF] with ['IF',<Condition @ 0x7f73bc8dfcb0>,'THEN',<Commands @ 0x7f73bc8dff20>,'ELSE',<Commands @ 0x7f73bc9515b0>,'ENDIF'] and goto state 43
+   yacc.py: 506:Result : <IfStatement @ 0x7f73bc8dfc80> (<nodes.IfStatement object at 0x7f73bc8df ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 43
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands command . LexToken(PID,'n',14,122)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x7f73bc8dfec0>,<IfStatement @ 0x7f73bc8dfc80>] and goto state 51
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfec0> (<nodes.Commands object at 0x7f73bc8dfec0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 51
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands . LexToken(PID,'n',14,122)
+   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 410:
+   yacc.py: 411:State  : 29
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands PID . LexToken(ASSIGN,':=',14,123)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 24
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfdd0> (<nodes.Identifier object at 0x7f73bc8dfd ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 24
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier . LexToken(ASSIGN,':=',14,123)
+   yacc.py: 445:Action : Shift and goto state 44
+   yacc.py: 410:
+   yacc.py: 411:State  : 44
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN . LexToken(PID,'n',14,125)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN PID . LexToken(DIV,'/',14,126)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfb30> (<nodes.Identifier object at 0x7f73bc8dfb ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN identifier . LexToken(DIV,'/',14,126)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bc8dfb30>] and goto state 64
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfb30> (<nodes.Identifier object at 0x7f73bc8dfb ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 64
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value . LexToken(DIV,'/',14,126)
+   yacc.py: 445:Action : Shift and goto state 88
+   yacc.py: 410:
+   yacc.py: 411:State  : 88
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value DIV . LexToken(NUM,2,14,127)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value DIV NUM . LexToken(SEMICOLON,';',14,128)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [2] and goto state 109
+   yacc.py: 506:Result : <int @ 0xb359c8> (2)
+   yacc.py: 410:
+   yacc.py: 411:State  : 109
+   yacc.py: 430:Defaulted state 109: Reduce using 35
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN value DIV value . LexToken(SEMICOLON,';',14,128)
+   yacc.py: 469:Action : Reduce rule [expression -> value DIV value] with [<Identifier @ 0x7f73bc8dfb30>,'/',2] and goto state 63
+   yacc.py: 506:Result : <Expression @ 0x7f73bc951580> (<nodes.Expression object at 0x7f73bc9515 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 63
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN expression . LexToken(SEMICOLON,';',14,128)
+   yacc.py: 445:Action : Shift and goto state 84
+   yacc.py: 410:
+   yacc.py: 411:State  : 84
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands identifier ASSIGN expression SEMICOLON . LexToken(UNTIL,'UNTIL',15,134)
+   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x7f73bc8dfdd0>,':=',<Expression @ 0x7f73bc951580>,';'] and goto state 43
+   yacc.py: 506:Result : <Assign @ 0x7f73bc8dfe60> (<nodes.Assign object at 0x7f73bc8dfe60>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 43
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands command . LexToken(UNTIL,'UNTIL',15,134)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x7f73bc8dfec0>,<Assign @ 0x7f73bc8dfe60>] and goto state 51
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfec0> (<nodes.Commands object at 0x7f73bc8dfec0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 51
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands . LexToken(UNTIL,'UNTIL',15,134)
+   yacc.py: 445:Action : Shift and goto state 73
+   yacc.py: 410:
+   yacc.py: 411:State  : 73
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL . LexToken(PID,'n',15,140)
+   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 410:
+   yacc.py: 411:State  : 49
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL PID . LexToken(EQ,'=',15,141)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfbc0> (<nodes.Identifier object at 0x7f73bc8dfb ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL identifier . LexToken(EQ,'=',15,141)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x7f73bc8dfbc0>] and goto state 46
+   yacc.py: 506:Result : <Identifier @ 0x7f73bc8dfbc0> (<nodes.Identifier object at 0x7f73bc8dfb ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 46
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL value . LexToken(EQ,'=',15,141)
+   yacc.py: 445:Action : Shift and goto state 66
+   yacc.py: 410:
+   yacc.py: 411:State  : 66
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL value EQ . LexToken(NUM,0,15,142)
+   yacc.py: 445:Action : Shift and goto state 47
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL value EQ NUM . LexToken(SEMICOLON,';',15,143)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [0] and goto state 91
+   yacc.py: 506:Result : <int @ 0xb35988> (0)
+   yacc.py: 410:
+   yacc.py: 411:State  : 91
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL value EQ value . LexToken(SEMICOLON,';',15,143)
+   yacc.py: 469:Action : Reduce rule [condition -> value EQ value] with [<Identifier @ 0x7f73bc8dfbc0>,'=',0] and goto state 98
+   yacc.py: 506:Result : <Condition @ 0x7f73bc951640> (<nodes.Condition object at 0x7f73bc95164 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 98
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL condition . LexToken(SEMICOLON,';',15,143)
+   yacc.py: 445:Action : Shift and goto state 114
+   yacc.py: 410:
+   yacc.py: 411:State  : 114
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands REPEAT commands UNTIL condition SEMICOLON . LexToken(END,'END',16,145)
+   yacc.py: 469:Action : Reduce rule [command -> REPEAT commands UNTIL condition SEMICOLON] with ['REPEAT',<Commands @ 0x7f73bc8dfec0>,'UNTIL',<Condition @ 0x7f73bc951640>,';'] and goto state 43
+   yacc.py: 506:Result : <RepeatUntil @ 0x7f73bc8dfe90> (<nodes.RepeatUntil object at 0x7f73bc8df ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 43
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(END,'END',16,145)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x7f73bc8dfb00>,<RepeatUntil @ 0x7f73bc8dfe90>] and goto state 40
+   yacc.py: 506:Result : <Commands @ 0x7f73bc8dfb00> (<nodes.Commands object at 0x7f73bc8dfb00 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 40
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(END,'END',16,145)
+   yacc.py: 445:Action : Shift and goto state 61
+   yacc.py: 410:
+   yacc.py: 411:State  : 61
+   yacc.py: 430:Defaulted state 61: Reduce using 5
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands END . None
+   yacc.py: 469:Action : Reduce rule [main -> PROGRAM IS declarations BEGIN commands END] with ['PROGRAM','IS',<Declarations @ 0x7f73bcba99a0>,'BEGIN',<Commands @ 0x7f73bc8dfb00>,'END'] and goto state 4
+   yacc.py: 506:Result : <Main @ 0x7f73bc8dfc20> (<nodes.Main object at 0x7f73bc8dfc20>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 4
+   yacc.py: 430:Defaulted state 4: Reduce using 1
+   yacc.py: 434:Stack  : procedures main . None
+   yacc.py: 469:Action : Reduce rule [program_all -> procedures main] with [<Procedures @ 0x7f73bc8df5c0>,<Main @ 0x7f73bc8dfc20>] and goto state 1
+   yacc.py: 506:Result : <Program @ 0x7f73bc8df590> (<nodes.Program object at 0x7f73bc8df590>)
+   yacc.py: 410:
+   yacc.py: 411:State  : 1
+   yacc.py: 434:Stack  : program_all . $end
+   yacc.py: 571:Done   : Returning <Program @ 0x7f73bc8df590> (<nodes.Program object at 0x7f73bc8df590>)
+   yacc.py: 572:PLY: PARSE DEBUG END
