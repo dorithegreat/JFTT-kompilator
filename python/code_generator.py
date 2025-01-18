@@ -17,7 +17,10 @@ class CodeGenerator:
         # starting from 0 because the vm numbers lines from 0, despite all editors numbering from 1
         # just to be annoying
         linenum_after_procedures = self.generate_procedures(self.tree.procedures, 0)
-        self.generate_main(self.tree.main, linenum_after_procedures)
+        
+        linenum_after_main, code_main = self.generate_main(self.tree.main)
+        self.code += code_main
+        self.code.append("HALT")
     
     
     def generate_procedures(self, procedures : nd.Procedures, linenum):
@@ -48,16 +51,19 @@ class CodeGenerator:
         return linenum
         
     
-    def generate_main(self, main : nd.Main, linenum):
+    def generate_main(self, main : nd.Main):
         # TODO if I leave it like this no variable name can repeat between main and the procedures
         # I should probably reset symbol table after every procedure
         # actually I should't, the procedures will also get called later
         # in that case I should probably prepend the procedure name to the variable name in the symbol table
         for var in main.declarations.declarations:
-            self.symbols.add_variable(var)
-        pass
+            if (isinstance(var, nd.Array)):
+                self.symbols.add_array(var.name, var.start, var.end)
+            else:
+                self.symbols.add_variable(var)
     
-        linenum = self.generate_commands(main.commands)
+        linenum, inner_code = self.generate_commands(main.commands)
+        return linenum, inner_code
     
     
     def generate_commands(self, commands : nd.Commands):
@@ -77,37 +83,78 @@ class CodeGenerator:
                 
                 # store the calculated expression in the right variable
                 #? this will always be a variable and not a constant, as you can't assign value to a constant
-                inner_code.append(f"STORE {self.symbols.get_variable(comm.variable.name)}")
-                linenum += 1
+                if isinstance(comm.variable, nd.ArrayPosition):
+                    if isinstance(comm.variable.position, int):
+                        inner_code.append(f"STORE {self.symbols.get_array_position(comm.variable.name, comm.variable.position)}")
+                        linenum += 1
+                    else:
+                        inner_code.append("STORE 1")
+                        inner_code.append(f"SET {self.symbols.get_array_position(comm.variable.name, self.symbols.get_array_beginning(comm.variable.name))}")
+                        inner_code.append(f"ADD {self.symbols.get_variable(comm.variable.position)}")
+                        inner_code.append("STORE 2")
+                        inner_code.append("LOAD 1")
+                        inner_code.append("STOREI 2")
+                        linenum += 6
+                    
+                else:
+                    inner_code.append(f"STORE {self.symbols.get_variable(comm.variable.name)}")
+                    linenum += 1
                 
                 
             elif type(comm) == nd.IfStatement:
-                linenum, c = self.generate_ifstatement(comm)
+                l, c = self.generate_ifstatement(comm)
                 inner_code += c
+                linenum += l
             elif type(comm) == nd.WhileLoop:
-                linenum, c = self.generate_while(comm, linenum)
+                l, c = self.generate_while(comm)
                 inner_code += c
+                linenum += l
             elif type(comm) == nd.RepeatUntil:
-                linenum, c = self.generate_repeat_until(comm, linenum)
+                l, c = self.generate_repeat_until(comm)
                 inner_code += c
+                linenum += l
             elif type(comm) == nd.ForTo:
-                pass
+                l, c = self.generate_for(comm)
+                inner_code += c
+                linenum += l
             elif type(comm) == nd.ForDownto:
-                pass
+                l, c = self.generate_for(comm)
+                inner_code += c
+                linenum += l
             elif type(comm) == nd.ProcCall:
                 pass
             elif type(comm) == nd.Read:
                 # you cannot read a constant so there's need for the same conditions as in WRITE
                 # TODO you can read an array though
-                inner_code.append(f"GET {self.symbols.get_variable(comm.variable.name)}")
-                linenum += 1
+                if isinstance(comm.variable, nd.ArrayPosition):
+                    inner_code.append(f"GET {self.symbols.get_array_position(comm.variable.name, comm.variable.position)}")
+                    linenum += 1
+                else:
+                    inner_code.append(f"GET {self.symbols.get_variable(comm.variable.name)}")
+                    linenum += 1
                 
             elif type(comm) == nd.Write:
                 if isinstance(comm.value, nd.Identifier):
-                    inner_code.append(f"PUT {self.symbols.get_variable(comm.value)}")
+                    inner_code.append(f"PUT {self.symbols.get_variable(comm.value.name)}")
                     linenum += 1
-                elif isinstance(comm.value, nd.Array):
-                    pass
+                elif isinstance(comm.value, nd.ArrayPosition):
+                    if isinstance(comm.value.position, int):
+                        inner_code.append(f"PUT {self.symbols.get_array_position(comm.value.name, comm.value.position)}")
+                        linenum += 1
+                    else:
+                        
+                        #? set the accumulator to the index of the start of the array
+                        # it is done by requesting the address of the first index of the array, in a roundabout way
+                        inner_code.append(f"SET {self.symbols.get_array_position(comm.value.name, self.symbols.get_array_beginning(comm.value.name))}")
+                        # add to it whatever value is hidden under the variable used as index
+                        inner_code.append(f"ADD {self.symbols.get_variable(comm.value.position)}")
+                        # put it down for easier access
+                        inner_code.append(f"STORE 1")
+                        # load from memory cell with index equal to the value in 1
+                        inner_code.append(f"LOADI 1")
+                        inner_code.append(f"PUT 0")
+                        
+                        linenum += 5
                 else:
                     if self.symbols.is_declared(comm.value):
                         inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
@@ -117,6 +164,7 @@ class CodeGenerator:
                         inner_code.append(f"SET {comm.value}")
                         inner_code.append(f"STORE {self.symbols.get_const(comm.value)}")
                         inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
+                        linenum += 3
                     
                 
         
@@ -131,20 +179,6 @@ class CodeGenerator:
         # like if 1 > 2 
         
         
-        #THIS IS (not anymore) ALL TRASH
-        # if block should come first because if else doesn't exist there's nothing to jump to
-        # wait no
-        # in any case, there should be a jump to skip if, if the condition is false
-        # though if there is an else block there would need to be a second jump to bypass if
-        # if there's no else block the only jump is to bypass if or not
-        # so if block should come first, so there's only a jump to skip if, and a jump to skip else after if was executed
-        # I think? it might not have much significance at all
-        # it's also possible to do either one first based on which code is shorter
-        #? damn what a mess
-        
-        #* Expressions should definitely jump over to else, not if, because of use of conditions in other code blocks
-        # as in, loops
-        
         lines_if, code_if = self.generate_commands(ifstatement.commands)
         
         if ifstatement.else_commands is not None:
@@ -154,38 +188,148 @@ class CodeGenerator:
             code_else = []
         
         # if the condition is true don't jump, if it's false jump right after if block
-        lines_cond, code_cond = self.generate_condition(ifstatement.condition, 0, linenum + lines_if)
+        lines_cond, code_cond = self.generate_condition(ifstatement.condition, lines_if + 1, False)
         
         
         inner_code += code_cond
         linenum += lines_cond
         inner_code += code_if
         linenum += lines_if
-        inner_code.append(f"JUMP {linenum + lines_else}")
+        inner_code.append(f"JUMP {lines_else + 1}")
         linenum += 1
         inner_code += code_else
         linenum += lines_else
         
-        # line_if, code_if = self.generate_commands(ifstatement.commands, linenum)
-        
-        # line_else = None
-        # if ifstatement.else_commands is not None:
-        #     line_else, code_else = self.generate_commands(ifstatement.else_commands, linenum)
-        # else:
-        #     # if there's no else, linenum after else is the same as linenum
-        #     line_else = linenum
-        
-        # # if true jump to line number before if, which is line_if
-        # # if false jump to line number before else, which is linenum
-        # # else comes first, then if
-        # line_cond, code_cond = self.generate_condition(ifstatement.condition, linenum, line_else, linenum)
+        return linenum, inner_code
             
     def generate_while(self, whileloop : nd.WhileLoop):
-        # TODO evaluate condition
-        self.generate_commands(whileloop.commands)
+        linenum = 0
+        inner_code = []
         
-    def generate_repeat_until(self, repeat : nd.RepeatUntil, lineneum):
-        pass
+        lines_comm, code_comm = self.generate_commands(whileloop.commands)
+        lines_cond, code_cond = self.generate_condition(whileloop.condition, lines_comm + 1, False)
+        
+
+        inner_code += code_cond
+        linenum += lines_cond
+        inner_code += code_comm
+        linenum += lines_comm
+
+        inner_code.append(f"JUMP {0 - linenum + 1}")
+        linenum += 1
+        
+        return linenum, inner_code
+        
+    def generate_repeat_until(self, repeat : nd.RepeatUntil):
+        linenum = 0
+        inner_code = []
+        
+        lines_comm, code_comm = self.generate_commands(repeat.commands)
+        lines_cond, code_cond = self.generate_condition(repeat.condition, 0 - lines_comm, False)
+        
+        #? this is repeat until - commands go first and only afterwards is the condition checked
+        inner_code += code_comm
+        linenum += lines_comm
+        inner_code += code_cond
+        linenum += lines_cond
+
+        
+        return linenum, inner_code
+        
+    def generate_for(self, forloop):
+        inner_code = []
+        linenum = 0 
+        
+        if not self.symbols.is_declared(1):
+            inner_code.append("SET 1")
+            self.symbols.add_const(1)
+            inner_code.append(f"STORE {self.symbols.get_const(1)}")
+            linenum += 2
+                    
+        # iterators cannot be modified inside loop, but it's impossible anyway
+        # since you can't reach it through symbols.get_variable
+        self.symbols.add_iterator(forloop.iterator)
+        
+        
+        if isinstance(forloop.start_value, nd.Identifier):
+            inner_code.append(f"LOAD  {self.symbols.get_variable(forloop.start_value.name)}")
+            linenum += 1
+        elif isinstance(forloop.start_value, nd.Array):
+            inner_code.append(f"LOAD {self.symbols.get_array_position(forloop.value1.name, forloop.start_value.position)}")
+        else:
+            if self.symbols.is_declared(forloop.start_value):
+                inner_code.append(f"LOAD  {self.symbols.get_const(forloop.start_value)}")
+                linenum += 1
+            else:
+                self.symbols.add_const(forloop.start_value)
+                inner_code.append(f"SET {forloop.start_value}")
+                inner_code.append(f"STORE {self.symbols.get_const(forloop.start_value)}")
+                # I *think* there's no need to load again afterwards because it stays in the accumulator
+                linenum += 2
+            
+        inner_code.append(f"STORE {self.symbols.get_iterator(forloop.iterator)}")
+        linenum += 1
+        
+        line_sub = linenum
+        
+        if isinstance(forloop.end_value, nd.Identifier):
+            inner_code.append(f"SUB  {self.symbols.get_variable(forloop.end_value.name)}")
+            linenum += 1
+        elif isinstance(forloop.end_value, nd.Array):
+            inner_code.append(f"SUB {self.symbols.get_array_position(forloop.end_value.name, forloop.end_value.position)}")
+        else:
+            if self.symbols.is_declared(forloop.end_value):
+                inner_code.append(f"SUB  {self.symbols.get_const(forloop.end_value)}")
+                linenum += 1
+            else:
+                #? put down previously loaded value
+                #* this is inefficient but will get optimized in pre- and postprocessing
+                inner_code.append("STORE 1")
+                linenum += 1
+                
+                self.symbols.add_const(forloop.end_value)
+                inner_code.append(f"SET {forloop.end_value}")
+                inner_code.append(f"STORE {self.symbols.get_const(forloop.end_value)}")
+                linenum += 2
+                
+                # load the previously set aside value
+                inner_code.append("LOAD 1")
+                inner_code.append(f"SUB {self.symbols.get_const(forloop.end_value)}")
+                linenum += 3
+        
+
+        
+        lines_comm, code_comm = self.generate_commands(forloop.commands)   
+        
+        #TODO make sure these numbers are correct
+        if isinstance(forloop, nd.ForTo):
+            inner_code.append(f"JPOS {lines_comm + 5}")
+            linenum += 1
+        else:
+            inner_code.append(f"JNEG {lines_comm + 5}")
+            linenum += 1
+        
+        # inner_code.append(f"JZERO {lines_comm + 5}")
+        
+        inner_code += code_comm
+        linenum += lines_comm
+        
+        inner_code.append(f"LOAD {self.symbols.get_iterator(forloop.iterator)}")
+        if isinstance(forloop, nd.ForDownto):
+            inner_code.append(f"SUB {self.symbols.get_const(1)}")
+        else:
+            inner_code.append(f"ADD {self.symbols.get_const(1)}")
+        
+        inner_code.append(f"STORE {self.symbols.get_iterator(forloop.iterator)}")
+        linenum += 3
+        
+        # there is no checking if the result is 0 because the jump leads to JZERO to skip the loop
+        # at lest, it should
+        inner_code.append(f"JUMP {line_sub - linenum - 1}")
+        linenum += 1
+        
+        return linenum, inner_code
+        
     
     def generate_expression(self, expression : nd.Expression):
         linenum = 0
@@ -193,18 +337,50 @@ class CodeGenerator:
         
         # TODO if both are numbers just calculate it
         
+        if expression.operator is None:
+            if isinstance(expression.value1, nd.Identifier):
+                inner_code.append(f"LOAD  {self.symbols.get_variable(expression.value1.name)}")
+            elif isinstance(expression.value1, nd.ArrayPosition):
+                if isinstance(expression.value1.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(expression.value1.name, expression.value1.position)}")
+                    
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(expression.value1.name, self.symbols.get_array_beginning(expression.value1.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(expression.value1.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOADI 1")
+                    
+                    linenum += 4
+                
+            else:
+                if self.symbols.is_declared(expression.value1):
+                    inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
+                    linenum += 1
+                else:
+                    self.symbols.add_const(expression.value1)
+                    inner_code.append(f"SET {expression.value1}")
+                    inner_code.append(f"STORE {self.symbols.get_const(expression.value1)}")
+                    # I *think* there's no need to load again afterwards because it stays in the accumulator
+                    linenum += 2
+                    
+            return linenum, inner_code            
         
-        
-        # // I believe it's safe to directly append these lines to code
-        # // as it seems to be illegal to use an expression in a condition
-        # // I might change it to use inner_code to be consistent with other functions
-        # nope, expressions can be invoked in generate_commands, which means that they must return their own code
-        if expression.operator == "ADD":\
+        if expression.operator == "ADD":
             
             if isinstance(expression.value1, nd.Identifier):
                 inner_code.append(f"LOAD  {self.symbols.get_variable(expression.value1.name)}")
-            elif isinstance(expression.value1, nd.Array):
-                pass
+                linenum += 1
+            elif isinstance(expression.value1, nd.ArrayPosition):
+                if isinstance(expression.value1.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(expression.value1.name, expression.value1.position)}")
+                    linenum += 1
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(expression.value1.name, self.symbols.get_array_beginning(expression.value1.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(expression.value1.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOADI 1")
+                    
+                    linenum += 4
             else:
                 if self.symbols.is_declared(expression.value1):
                     inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
@@ -219,16 +395,38 @@ class CodeGenerator:
             
             if isinstance(expression.value2, nd.Identifier):
                 inner_code.append(f"ADD  {self.symbols.get_variable(expression.value2.name)}")
-            elif isinstance(expression.value2, nd.Array):
-                pass
+                linenum += 1
+            elif isinstance(expression.value2, nd.ArrayPosition):
+                if isinstance(expression.value2.position, int):
+                    inner_code.append(f"ADD {self.symbols.get_array_position(expression.value2.name, expression.value2.position)}")
+                    linenum += 1
+                    
+                else:
+                    inner_code.append("STORE 2")
+                    inner_code.append(f"SET {self.symbols.get_array_position(expression.value2.name, self.symbols.get_array_beginning(expression.value2.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(expression.value2.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append("LOADI 1")
+                    inner_code.append("ADD 2")
+                    
+                    linenum += 6
             else:
                 if self.symbols.is_declared(expression.value2):
                     inner_code.append(f"ADD  {self.symbols.get_const(expression.value2)}")
                     linenum += 1
                 else:
+                    #? put down previously loaded value
+                    #* this is inefficient but will get optimized in pre- and postprocessing
+                    inner_code.append("STORE 1")
+                    linenum += 1
+                    
                     self.symbols.add_const(expression.value2)
                     inner_code.append(f"SET {expression.value2}")
                     inner_code.append(f"STORE {self.symbols.get_const(expression.value2)}")
+                    linenum += 2
+                    
+                    # load the previously set aside value
+                    inner_code.append("LOAD 1")
                     inner_code.append(f"ADD {self.symbols.get_const(expression.value2)}")
                     linenum += 3
                     
@@ -247,16 +445,64 @@ class CodeGenerator:
         elif expression.operator == "SUB":
             if isinstance(expression.value1, nd.Identifier):
                 inner_code.append(f"LOAD  {self.symbols.get_variable(expression.value1.name)}")
+                linenum += 1
+            elif isinstance(expression.value1, nd.ArrayPosition):
+                if isinstance(expression.value1.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(expression.value1.name, expression.value1.position)}")
+                    linenum += 1
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(expression.value1.name, self.symbols.get_array_beginning(expression.value1.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(expression.value1.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOADI 1")
+                    
+                    linenum += 4
             else:
-                inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
+                if self.symbols.is_declared(expression.value1):
+                    inner_code.append(f"LOAD  {self.symbols.get_const(expression.value1)}")
+                    linenum += 1
+                else:
+                    self.symbols.add_const(expression.value1)
+                    inner_code.append(f"SET {expression.value1}")
+                    inner_code.append(f"STORE {self.symbols.get_const(expression.value1)}")
+                    # I *think* there's no need to load again afterwards because it stays in the accumulator
+                    linenum += 2
                 
-            linenum += 1
             
             if isinstance(expression.value2, nd.Identifier):
                 inner_code.append(f"SUB  {self.symbols.get_variable(expression.value2.name)}")
+                linenum += 1
+            elif isinstance(expression.value2, nd.ArrayPosition):
+                if isinstance(expression.value2.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(expression.value2.name, expression.value2.position)}")
+                    linenum += 1
+                    
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(expression.value2.name, self.symbols.get_array_beginning(expression.value2.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(expression.value2.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append("LOADI 1")
+                    
+                    linenum += 4
             else:
-                inner_code.append(f"SUB  {self.symbols.get_const(expression.value2)}")
-            linenum += 1
+                if self.symbols.is_declared(expression.value2):
+                    inner_code.append(f"SUB  {self.symbols.get_const(expression.value2)}")
+                    linenum += 1
+                else:
+                    #? put down previously loaded value
+                    #* this is inefficient but will get optimized in pre- and postprocessing
+                    inner_code.append("STORE 1")
+                    linenum += 1
+                    
+                    self.symbols.add_const(expression.value2)
+                    inner_code.append(f"SET {expression.value2}")
+                    inner_code.append(f"STORE {self.symbols.get_const(expression.value2)}")
+                    linenum += 2
+                    
+                    # load the previously set aside value
+                    inner_code.append("LOAD 1")
+                    inner_code.append(f"SUB {self.symbols.get_const(expression.value2)}")
+                    linenum += 3
             
             # inner_code.append("STORE 1")
             # linenum += 1
@@ -264,21 +510,29 @@ class CodeGenerator:
             return linenum, inner_code
         
         elif expression.operator == "MUL":
-            # self.multiplication()
-            pass
+            # TODO implement for all numbers
+            if expression.value1 == 2:
+                inner_code.append(f"LOAD {self.symbols.get_variable(expression.value2.name)}")
+                inner_code.append(f"ADD {self.symbols.get_variable(expression.value2.name)}")
+                linenum += 2
+                return linenum, inner_code
         
         elif expression.operator == "DIV":
-            # self.division()
-            pass
+            if expression.value2 == 2:
+                inner_code.append(f"LOAD {self.symbols.get_variable(expression.value1.name)}")
+                inner_code.append("HALF")
+                linenum += 2
+                return linenum, inner_code
         
         elif expression.operator == "MOD":
             # self.modulo()
             
             pass
         
-    def generate_condition(self, condition : nd.Condition, jump_if_true, jump_if_false):
+    def generate_condition(self, condition : nd.Condition, jump, mode : bool):
         # counter of lines added by this function
         linenum = 0
+        inner_code = []
         
         # TODO optimize for already known conditions like 1 = 2
         
@@ -286,53 +540,132 @@ class CodeGenerator:
         
         # TODO rewrite so the jumps are correct (not always to true)
         
+        #? subtract the two values
+        if isinstance(condition.value1, nd.Identifier):
+            inner_code.append(f"LOAD {self.symbols.get_variable(condition.value1.name)}")
+            linenum += 1
+        elif isinstance(condition.value1, nd.ArrayPosition):
+                if isinstance(condition.value1.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(condition.value1.name, condition.value1.position)}")
+                    
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(condition.value1.name, self.symbols.get_array_beginning(condition.value1.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(condition.value1.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOADI 1")
+                    
+                    linenum += 4
+        else:
+            if self.symbols.is_declared(condition.value1):
+                inner_code.append(f"LOAD {self.symbols.get_const(condition.value1)}")
+                linenum += 1
+            else:
+                self.symbols.add_const(condition.value1)
+                inner_code.append(f"SET {condition.value1}")
+                inner_code.append(f"STORE {self.symbols.get_const(condition.value1)}")
+                linenum += 2
+                
+        if isinstance(condition.value2, nd.Identifier):
+            inner_code.append(f"SUB {self.symbols.get_variable(condition.value2.name)}")
+            linenum += 1
+        elif isinstance(condition.value2, nd.ArrayPosition):
+                if isinstance(condition.value2.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(condition.value2.name, condition.value2.position)}")
+                    
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(condition.value2.name, self.symbols.get_array_beginning(condition.value2.name))}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(condition.value2.position)}")
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOADI 1")
+                    
+                    linenum += 4
+        else:
+            if self.symbols.is_declared(condition.value2):
+                inner_code.append(f"SUB {self.symbols.get_const(condition.value2)}")
+                linenum += 1
+            else:
+                # put down the restult of previous LOAD because the accumulator is needed for SET
+                #? this does not warrant a TODO because it will get optimized when I make a preprocessor initializing all constants in advance
+                inner_code.append(f"STORE 1")
+                self.symbols.add_const(condition.value2)
+                inner_code.append(f"SET {condition.value2}")
+                inner_code.append(f"STORE {self.symbols.get_const(condition.value2)}")
+                # load back what we put down in 1
+                inner_code.append(f"LOAD 1")
+                inner_code.append(f"SUB {self.symbols.get_const(condition.value2)}")
+                linenum += 5
+        
+        if jump < 0:
+            jump -= linenum
+        
         if condition.operator == "EQ":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            self.code.append(f"JZERO {jump_if_true}")
-            # should I include jumping if false?
-            
-            # this could technically be just return 3 but I'll leave it like this for if I change something again
-            return linenum + 3
+                               
+            if mode == True:
+                inner_code.append(f"JZERO {jump}")
+                linenum += 1
+            else:
+                inner_code.append(f"JNEG {jump + 1}")
+                inner_code.append(f"JPOS {jump}")
+                linenum += 2
+                
+            return linenum, inner_code
+                
         
         elif condition.operator == "NEQ":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            
-            # if it's either positive or negative then the condition is true
-            # TODO do it smarter
-            self.code.append(f"JPOS {jump_if_true}")
-            self.code.append(f"JNEG {jump_if_true}")
-            
-            return linenum + 4
+            #* literally just the opposite of the above
+            if mode == False:
+                inner_code.append(f"JZERO {jump}")
+                linenum += 1
+            else:
+                inner_code.append(f"JNEG {jump + 1}")
+                inner_code.append(f"JPOS {jump}")
+                linenum += 2
+                
+            return linenum, inner_code
             
         elif condition.operator == "LEQ":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            self.code.append(f"JNEG {jump_if_true}")
-            self.code.append(f"JZERO {jump_if_true}")
-            
-            return linenum + 4
+            if mode == True:
+                inner_code.append(f"JNEG {jump +1}")
+                inner_code.append(f"JZERO {jump}")
+                linenum += 2
+            else:
+                inner_code.append(f"JPOS {jump + 0}")
+                linenum += 1
+                
+            return linenum, inner_code
             
         elif condition.operator == "GEQ":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            self.code.append(f"JPOS {jump_if_true}")
-            self.code.append(f"JZERO {jump_if_true}")
-            
-            return linenum + 4
+            if mode == True:
+                inner_code.append(f"JZERO {jump +1}")
+                inner_code.append(f"JPOS {jump}")
+                linenum += 2
+            else:
+                inner_code.append(f"JNEG {jump + 0}")
+                linenum += 1
+                
+            return linenum, inner_code
         
         elif condition.operator == "LT":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            self.code.append(f"JNEG {jump_if_true}")
-            
-            return linenum + 3
+            if mode == False:
+                inner_code.append(f"JZERO {jump +1}")
+                inner_code.append(f"JPOS {jump}")
+                linenum += 2
+            else:
+                inner_code.append(f"JNEG {jump + 0}")
+                linenum += 1
+                
+            return linenum, inner_code
         
         elif condition.operator == "GT":
-            self.code.append(f"LOAD {self.symbols.get_variable(condition.value1)}")
-            self.code.append(f"SUB {self.symbols.get_variable(condition.value2)}")
-            self.code.append(f"JPOS {jump_if_true}")
+            if mode == True:
+                inner_code.append(f"JPOS {jump}")
+                linenum += 1
+            else:
+                inner_code.append(f"JNEG {jump + 1}")
+                inner_code.append(f"JZERO {jump}")
+                linenum += 2
+                
+                
+            return linenum, inner_code
             
-            return linenum + 3
         

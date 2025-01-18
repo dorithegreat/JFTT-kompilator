@@ -21,6 +21,11 @@ class Constant:
     def __init__(self, value, memory_location):
         self.value = value
         self.memory_location = memory_location
+        
+class Iterator:
+    def __init__(self, name, memory_location):
+        self.name = name
+        self.memory_location = memory_location
 
 class SymbolTable(dict):
     
@@ -33,6 +38,7 @@ class SymbolTable(dict):
     first_available_memory = 10
     
     consts = {}
+    iterators = {}
     
     def __init__(self):
         super().__init__()
@@ -63,6 +69,13 @@ class SymbolTable(dict):
         
         self.consts.setdefault(value, Constant(value, self.first_available_memory))
         self.first_available_memory += 1
+        
+    def add_iterator(self, name):
+        if name in self:
+            raise Exception("Trying to use a for loop iterator with the same name as declared variable")
+        
+        self.setdefault(name, Iterator(name, self.first_available_memory))
+        self.first_available_memory += 1
     
     def get_variable(self, var):
         if var in self:
@@ -78,8 +91,27 @@ class SymbolTable(dict):
         #     self.add_const(const)
         #     return self.get(const).memory_location
         
+    def get_array_position(self, arr, pos):
+        if arr in self:
+            return self.get(arr).get_at(pos)
+        
+    def get_array_beginning(self, arr):
+        if arr in self:
+            return self.get(arr).first_index
+        
+    def get_iterator(self, name):
+        if name in self:
+            return self.get(name).memory_location
+        else:
+            # I honestly can't see how this would ever occur but why not put it here
+            raise Exception("Referring to an undeclared iterator")
+        
     def is_declared(self, const):
         if const in self.consts:
             return True
         else:
             return False
+        
+    # it's perfectly legal to have two non-nested loops using iterators with the same name
+    def dealocate_iterator(self, name):
+        self.iterators.pop(name)

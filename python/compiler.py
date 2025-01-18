@@ -60,7 +60,7 @@ t_RBR = r'\]'
 t_LPAR = r'\('
 t_RPAR = r'\)'
 
-t_COM = r'\#.*'
+t_ignore_COMMENT = r'\#.*'
 t_PID = r'[_a-z]+'
 
 t_ADD = r'\+'
@@ -102,7 +102,8 @@ def t_error(t):
 
 # * parser
 
-tree = None
+# tree = None
+literals = ":"
 
 # program_all - the main rule
 # first declare the procedures, than the main function
@@ -362,25 +363,25 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-text = '''
-PROGRAM IS
-	n, p
-BEGIN
-    READ n;
-	p:=n+2;
-	p:=2-p;
-	IF n>p THEN 
-	    WRITE 1;
-	ELSE 
-	    WRITE 0;
-	ENDIF
-	n:=n/2;
-END
-'''
+f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/example6.imp", "r")
+text = f.read()
+
+# text = '''
+# PROGRAM IS
+# 	t[0:5]
+# BEGIN
+#     READ t[0];
+#     WRITE t[0];
+# END
+# '''
 tree = parser.parse(text, debug=log)
 
 codegen = CodeGenerator(tree)
 codegen.generate()
 
+# for line in codegen.code:
+#     print(line)
+
+f = open("output.txt", "w")
 for line in codegen.code:
-    print(line)
+    f.write(line + "\n")
