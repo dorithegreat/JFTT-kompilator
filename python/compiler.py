@@ -178,7 +178,7 @@ def p_command_for_to(p):
 
 def p_command_for_downto(p):
     'command : FOR PID FROM value DOWNTO value DO commands ENDFOR'
-    p[0] = nd.ForTo(p[2], p[4], p[6], p[8])
+    p[0] = nd.ForDownto(p[2], p[4], p[6], p[8])
 
 def p_command_proc_call(p):
     'command : proc_call'
@@ -363,7 +363,7 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/example6.imp", "r")
+f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/exampleA.imp", "r")
 text = f.read()
 
 # text = '''

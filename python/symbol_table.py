@@ -23,9 +23,11 @@ class Constant:
         self.memory_location = memory_location
         
 class Iterator:
-    def __init__(self, name, memory_location):
+    def __init__(self, name, memory_location, condition_location):
         self.name = name
         self.memory_location = memory_location
+        self.condition_location = condition_location
+        
 
 class SymbolTable(dict):
     
@@ -38,7 +40,6 @@ class SymbolTable(dict):
     first_available_memory = 10
     
     consts = {}
-    iterators = {}
     
     def __init__(self):
         super().__init__()
@@ -74,8 +75,8 @@ class SymbolTable(dict):
         if name in self:
             raise Exception("Trying to use a for loop iterator with the same name as declared variable")
         
-        self.setdefault(name, Iterator(name, self.first_available_memory))
-        self.first_available_memory += 1
+        self.setdefault(name, Iterator(name, self.first_available_memory, self.first_available_memory + 1))
+        self.first_available_memory += 2
     
     def get_variable(self, var):
         if var in self:
@@ -114,4 +115,9 @@ class SymbolTable(dict):
         
     # it's perfectly legal to have two non-nested loops using iterators with the same name
     def dealocate_iterator(self, name):
-        self.iterators.pop(name)
+        if name in self:
+            self.pop(name)
+            
+    def get_iterator_condition(self, iterator):
+        if iterator in self:
+            return self.get(iterator).condition_location

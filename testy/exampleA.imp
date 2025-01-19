@@ -8,13 +8,19 @@ BEGIN
         FOR i FROM tc[0] DOWNTO tc[n] DO
 		ta[i]:=i;
 		tb[i]:=n-i;
+		#WRITE 1;
 	ENDFOR
+	WRITE 2;
         j:=tc[n];
         WHILE j<=tc[0] DO
-		tc[j]:=ta[j]*tb[j];
-                j:=j+1;
+			#tc[j]:=ta[j]*tb[j];
+			tc[j]:=ta[j]+tb[j];
+            j:=j+1;
+			#WRITE j;
 	ENDWHILE
-        FOR i FROM 0 TO n DO
+	#WRITE 3;
+    FOR i FROM 0 TO n DO
+		#WRITE 4;
 		WRITE tc[i];
 	ENDFOR
 END
