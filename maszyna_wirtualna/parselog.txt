@@ -50,1064 +50,223 @@
    yacc.py: 362:PLY: PARSE DEBUG START
    yacc.py: 410:
    yacc.py: 411:State  : 0
-   yacc.py: 434:Stack  : . LexToken(PROGRAM,'PROGRAM',1,0)
+   yacc.py: 434:Stack  : . LexToken(PROGRAM,'PROGRAM',2,56)
    yacc.py: 473:Action : Reduce rule [empty -> <empty>] with [] and goto state 3
-   yacc.py: 548:Result : <NoneType @ 0xa3f8a0> (None)
+   yacc.py: 548:Result : <NoneType @ 0xa408a0> (None)
    yacc.py: 410:
    yacc.py: 411:State  : 3
-   yacc.py: 434:Stack  : empty . LexToken(PROGRAM,'PROGRAM',1,0)
+   yacc.py: 434:Stack  : empty . LexToken(PROGRAM,'PROGRAM',2,56)
    yacc.py: 469:Action : Reduce rule [procedures -> empty] with [None] and goto state 2
-   yacc.py: 506:Result : <Procedures @ 0x720d10c13b60> (<nodes.Procedures object at 0x720d10c13b ...)
+   yacc.py: 506:Result : <Procedures @ 0x77d7ab5dbd70> (<nodes.Procedures object at 0x77d7ab5dbd ...)
    yacc.py: 410:
    yacc.py: 411:State  : 2
-   yacc.py: 434:Stack  : procedures . LexToken(PROGRAM,'PROGRAM',1,0)
+   yacc.py: 434:Stack  : procedures . LexToken(PROGRAM,'PROGRAM',2,56)
    yacc.py: 445:Action : Shift and goto state 6
    yacc.py: 410:
    yacc.py: 411:State  : 6
-   yacc.py: 434:Stack  : procedures PROGRAM . LexToken(IS,'IS',1,8)
+   yacc.py: 434:Stack  : procedures PROGRAM . LexToken(IS,'IS',2,64)
    yacc.py: 445:Action : Shift and goto state 9
    yacc.py: 410:
    yacc.py: 411:State  : 9
-   yacc.py: 434:Stack  : procedures PROGRAM IS . LexToken(PID,'n',2,12)
+   yacc.py: 434:Stack  : procedures PROGRAM IS . LexToken(PID,'a',3,68)
    yacc.py: 445:Action : Shift and goto state 14
    yacc.py: 410:
    yacc.py: 411:State  : 14
-   yacc.py: 434:Stack  : procedures PROGRAM IS PID . LexToken(COMMA,',',2,13)
-   yacc.py: 469:Action : Reduce rule [declarations -> PID] with ['n'] and goto state 12
-   yacc.py: 506:Result : <Declarations @ 0x720d10c13a70> (<nodes.Declarations object at 0x720d10c1 ...)
+   yacc.py: 434:Stack  : procedures PROGRAM IS PID . LexToken(COMMA,',',3,69)
+   yacc.py: 469:Action : Reduce rule [declarations -> PID] with ['a'] and goto state 12
+   yacc.py: 506:Result : <Declarations @ 0x77d7ab5dbce0> (<nodes.Declarations object at 0x77d7ab5d ...)
    yacc.py: 410:
    yacc.py: 411:State  : 12
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',2,13)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',3,69)
    yacc.py: 445:Action : Shift and goto state 21
    yacc.py: 410:
    yacc.py: 411:State  : 21
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'j',2,15)
-   yacc.py: 445:Action : Shift and goto state 41
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'b',3,70)
+   yacc.py: 445:Action : Shift and goto state 40
    yacc.py: 410:
-   yacc.py: 411:State  : 41
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(COMMA,',',2,16)
-   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID] with [<Declarations @ 0x720d10c13a70>,',','j'] and goto state 12
-   yacc.py: 506:Result : <Declarations @ 0x720d10c13a70> (<nodes.Declarations object at 0x720d10c1 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 12
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',2,16)
-   yacc.py: 445:Action : Shift and goto state 21
-   yacc.py: 410:
-   yacc.py: 411:State  : 21
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'ta',2,18)
-   yacc.py: 445:Action : Shift and goto state 41
-   yacc.py: 410:
-   yacc.py: 411:State  : 41
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(LBR,'[',2,20)
-   yacc.py: 445:Action : Shift and goto state 62
-   yacc.py: 410:
-   yacc.py: 411:State  : 62
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR . LexToken(NUM,0,2,21)
-   yacc.py: 445:Action : Shift and goto state 83
-   yacc.py: 410:
-   yacc.py: 411:State  : 83
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM . LexToken(:,':',2,22)
-   yacc.py: 445:Action : Shift and goto state 105
-   yacc.py: 410:
-   yacc.py: 411:State  : 105
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : . LexToken(NUM,24,2,23)
-   yacc.py: 445:Action : Shift and goto state 118
-   yacc.py: 410:
-   yacc.py: 411:State  : 118
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM . LexToken(RBR,']',2,25)
-   yacc.py: 445:Action : Shift and goto state 122
-   yacc.py: 410:
-   yacc.py: 411:State  : 122
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM RBR . LexToken(COMMA,',',2,26)
-   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID LBR NUM : NUM RBR] with [<Declarations @ 0x720d10c13a70>,',','ta','[',0,':',24,']'] and goto state 12
-   yacc.py: 506:Result : <Declarations @ 0x720d10c13a70> (<nodes.Declarations object at 0x720d10c1 ...)
+   yacc.py: 411:State  : 40
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(BEGIN,'BEGIN',4,72)
+   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID] with [<Declarations @ 0x77d7ab5dbce0>,',','b'] and goto state 12
+   yacc.py: 506:Result : <Declarations @ 0x77d7ab5dbce0> (<nodes.Declarations object at 0x77d7ab5d ...)
    yacc.py: 410:
    yacc.py: 411:State  : 12
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',2,26)
-   yacc.py: 445:Action : Shift and goto state 21
-   yacc.py: 410:
-   yacc.py: 411:State  : 21
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'tb',2,28)
-   yacc.py: 445:Action : Shift and goto state 41
-   yacc.py: 410:
-   yacc.py: 411:State  : 41
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(LBR,'[',2,30)
-   yacc.py: 445:Action : Shift and goto state 62
-   yacc.py: 410:
-   yacc.py: 411:State  : 62
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR . LexToken(NUM,0,2,31)
-   yacc.py: 445:Action : Shift and goto state 83
-   yacc.py: 410:
-   yacc.py: 411:State  : 83
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM . LexToken(:,':',2,32)
-   yacc.py: 445:Action : Shift and goto state 105
-   yacc.py: 410:
-   yacc.py: 411:State  : 105
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : . LexToken(NUM,24,2,33)
-   yacc.py: 445:Action : Shift and goto state 118
-   yacc.py: 410:
-   yacc.py: 411:State  : 118
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM . LexToken(RBR,']',2,35)
-   yacc.py: 445:Action : Shift and goto state 122
-   yacc.py: 410:
-   yacc.py: 411:State  : 122
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM RBR . LexToken(COMMA,',',2,36)
-   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID LBR NUM : NUM RBR] with [<Declarations @ 0x720d10c13a70>,',','tb','[',0,':',24,']'] and goto state 12
-   yacc.py: 506:Result : <Declarations @ 0x720d10c13a70> (<nodes.Declarations object at 0x720d10c1 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 12
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(COMMA,',',2,36)
-   yacc.py: 445:Action : Shift and goto state 21
-   yacc.py: 410:
-   yacc.py: 411:State  : 21
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA . LexToken(PID,'tc',2,38)
-   yacc.py: 445:Action : Shift and goto state 41
-   yacc.py: 410:
-   yacc.py: 411:State  : 41
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID . LexToken(LBR,'[',2,40)
-   yacc.py: 445:Action : Shift and goto state 62
-   yacc.py: 410:
-   yacc.py: 411:State  : 62
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR . LexToken(NUM,0,2,41)
-   yacc.py: 445:Action : Shift and goto state 83
-   yacc.py: 410:
-   yacc.py: 411:State  : 83
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM . LexToken(:,':',2,42)
-   yacc.py: 445:Action : Shift and goto state 105
-   yacc.py: 410:
-   yacc.py: 411:State  : 105
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : . LexToken(NUM,24,2,43)
-   yacc.py: 445:Action : Shift and goto state 118
-   yacc.py: 410:
-   yacc.py: 411:State  : 118
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM . LexToken(RBR,']',2,45)
-   yacc.py: 445:Action : Shift and goto state 122
-   yacc.py: 410:
-   yacc.py: 411:State  : 122
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations COMMA PID LBR NUM : NUM RBR . LexToken(BEGIN,'BEGIN',3,47)
-   yacc.py: 469:Action : Reduce rule [declarations -> declarations COMMA PID LBR NUM : NUM RBR] with [<Declarations @ 0x720d10c13a70>,',','tc','[',0,':',24,']'] and goto state 12
-   yacc.py: 506:Result : <Declarations @ 0x720d10c13a70> (<nodes.Declarations object at 0x720d10c1 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 12
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(BEGIN,'BEGIN',3,47)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations . LexToken(BEGIN,'BEGIN',4,72)
    yacc.py: 445:Action : Shift and goto state 20
    yacc.py: 410:
    yacc.py: 411:State  : 20
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN . LexToken(PID,'n',4,54)
-   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN . LexToken(READ,'READ',5,80)
+   yacc.py: 445:Action : Shift and goto state 31
    yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN PID . LexToken(ASSIGN,':=',4,55)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 24
-   yacc.py: 506:Result : <Identifier @ 0x720d10c13fb0> (<nodes.Identifier object at 0x720d10c13f ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier . LexToken(ASSIGN,':=',4,55)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier ASSIGN . LexToken(NUM,24,4,57)
-   yacc.py: 445:Action : Shift and goto state 47
-   yacc.py: 410:
-   yacc.py: 411:State  : 47
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier ASSIGN NUM . LexToken(SEMICOLON,';',4,59)
-   yacc.py: 469:Action : Reduce rule [value -> NUM] with [24] and goto state 64
-   yacc.py: 506:Result : <int @ 0xb35c88> (24)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier ASSIGN value . LexToken(SEMICOLON,';',4,59)
-   yacc.py: 469:Action : Reduce rule [expression -> value] with [24] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c13dd0> (<nodes.Expression object at 0x720d10c13d ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier ASSIGN expression . LexToken(SEMICOLON,';',4,59)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN identifier ASSIGN expression SEMICOLON . LexToken(PID,'tc',5,62)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x720d10c13fb0>,':=',<Expression @ 0x720d10c13dd0>,';'] and goto state 23
-   yacc.py: 506:Result : <Assign @ 0x720d10c13f20> (<nodes.Assign object at 0x720d10c13f20>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN command . LexToken(PID,'tc',5,62)
-   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Assign @ 0x720d10c13f20>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(PID,'tc',5,62)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID . LexToken(LBR,'[',5,64)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR . LexToken(NUM,0,5,65)
-   yacc.py: 445:Action : Shift and goto state 76
-   yacc.py: 410:
-   yacc.py: 411:State  : 76
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR NUM . LexToken(RBR,']',5,66)
-   yacc.py: 445:Action : Shift and goto state 101
-   yacc.py: 410:
-   yacc.py: 411:State  : 101
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR NUM RBR . LexToken(ASSIGN,':=',5,67)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR NUM RBR] with ['tc','[',0,']'] and goto state 24
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c13c80> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier . LexToken(ASSIGN,':=',5,67)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN . LexToken(PID,'n',5,69)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID . LexToken(SEMICOLON,';',5,70)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c13c20> (<nodes.Identifier object at 0x720d10c13c ...)
+   yacc.py: 411:State  : 31
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ . LexToken(PID,'a',5,85)
+   yacc.py: 445:Action : Shift and goto state 48
    yacc.py: 410:
    yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN identifier . LexToken(SEMICOLON,';',5,70)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c13c20>] and goto state 64
-   yacc.py: 506:Result : <Identifier @ 0x720d10c13c20> (<nodes.Identifier object at 0x720d10c13c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value . LexToken(SEMICOLON,';',5,70)
-   yacc.py: 469:Action : Reduce rule [expression -> value] with [<Identifier @ 0x720d10c13c20>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c13d10> (<nodes.Expression object at 0x720d10c13d ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression . LexToken(SEMICOLON,';',5,70)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression SEMICOLON . LexToken(PID,'tc',6,73)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<ArrayPosition @ 0x720d10c13c80>,':=',<Expression @ 0x720d10c13d10>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c13ef0> (<nodes.Assign object at 0x720d10c13ef0>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(PID,'tc',6,73)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<Assign @ 0x720d10c13ef0>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(PID,'tc',6,73)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID . LexToken(LBR,'[',6,75)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR . LexToken(PID,'n',6,76)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR PID . LexToken(RBR,']',6,77)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID LBR PID RBR . LexToken(ASSIGN,':=',6,78)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tc','[','n',']'] and goto state 24
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c13fe0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier . LexToken(ASSIGN,':=',6,78)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN . LexToken(PID,'n',6,80)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID . LexToken(SUB,'-',6,81)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c13f80> (<nodes.Identifier object at 0x720d10c13f ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN identifier . LexToken(SUB,'-',6,81)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c13f80>] and goto state 64
-   yacc.py: 506:Result : <Identifier @ 0x720d10c13f80> (<nodes.Identifier object at 0x720d10c13f ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value . LexToken(SUB,'-',6,81)
-   yacc.py: 445:Action : Shift and goto state 86
-   yacc.py: 410:
-   yacc.py: 411:State  : 86
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB . LexToken(PID,'tc',6,82)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB PID . LexToken(LBR,'[',6,84)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB PID LBR . LexToken(NUM,0,6,85)
-   yacc.py: 445:Action : Shift and goto state 76
-   yacc.py: 410:
-   yacc.py: 411:State  : 76
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB PID LBR NUM . LexToken(RBR,']',6,86)
-   yacc.py: 445:Action : Shift and goto state 101
-   yacc.py: 410:
-   yacc.py: 411:State  : 101
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB PID LBR NUM RBR . LexToken(SEMICOLON,';',6,87)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR NUM RBR] with ['tc','[',0,']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4d8e0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB identifier . LexToken(SEMICOLON,';',6,87)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4d8e0>] and goto state 107
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4d8e0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 107
-   yacc.py: 430:Defaulted state 107: Reduce using 33
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value SUB value . LexToken(SEMICOLON,';',6,87)
-   yacc.py: 469:Action : Reduce rule [expression -> value SUB value] with [<Identifier @ 0x720d10c13f80>,'-',<ArrayPosition @ 0x720d10c4d8e0>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c13f50> (<nodes.Expression object at 0x720d10c13f ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression . LexToken(SEMICOLON,';',6,87)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression SEMICOLON . LexToken(PID,'j',7,97)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<ArrayPosition @ 0x720d10c13fe0>,':=',<Expression @ 0x720d10c13f50>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c13d70> (<nodes.Assign object at 0x720d10c13d70>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(PID,'j',7,97)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<Assign @ 0x720d10c13d70>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(PID,'j',7,97)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID . LexToken(ASSIGN,':=',7,98)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['j'] and goto state 24
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c080> (<nodes.Identifier object at 0x720d10c4c0 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier . LexToken(ASSIGN,':=',7,98)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN . LexToken(PID,'tc',7,100)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID . LexToken(LBR,'[',7,102)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR . LexToken(NUM,0,7,103)
-   yacc.py: 445:Action : Shift and goto state 76
-   yacc.py: 410:
-   yacc.py: 411:State  : 76
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR NUM . LexToken(RBR,']',7,104)
-   yacc.py: 445:Action : Shift and goto state 101
-   yacc.py: 410:
-   yacc.py: 411:State  : 101
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR NUM RBR . LexToken(ADD,'+',7,105)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR NUM RBR] with ['tc','[',0,']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4d8b0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN identifier . LexToken(ADD,'+',7,105)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4d8b0>] and goto state 64
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4d8b0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value . LexToken(ADD,'+',7,105)
-   yacc.py: 445:Action : Shift and goto state 85
-   yacc.py: 410:
-   yacc.py: 411:State  : 85
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value ADD . LexToken(NUM,1,7,106)
-   yacc.py: 445:Action : Shift and goto state 47
-   yacc.py: 410:
-   yacc.py: 411:State  : 47
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value ADD NUM . LexToken(SEMICOLON,';',7,107)
-   yacc.py: 469:Action : Reduce rule [value -> NUM] with [1] and goto state 106
-   yacc.py: 506:Result : <int @ 0xb359a8> (1)
-   yacc.py: 410:
-   yacc.py: 411:State  : 106
-   yacc.py: 430:Defaulted state 106: Reduce using 32
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value ADD value . LexToken(SEMICOLON,';',7,107)
-   yacc.py: 469:Action : Reduce rule [expression -> value ADD value] with [<ArrayPosition @ 0x720d10c4d8b0>,'+',1] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4c0e0> (<nodes.Expression object at 0x720d10c4c0 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression . LexToken(SEMICOLON,';',7,107)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression SEMICOLON . LexToken(FOR,'FOR',8,117)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x720d10c4c080>,':=',<Expression @ 0x720d10c4c0e0>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c4c320> (<nodes.Assign object at 0x720d10c4c320>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(FOR,'FOR',8,117)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<Assign @ 0x720d10c4c320>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(FOR,'FOR',8,117)
-   yacc.py: 445:Action : Shift and goto state 28
-   yacc.py: 410:
-   yacc.py: 411:State  : 28
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR . LexToken(PID,'i',8,121)
-   yacc.py: 445:Action : Shift and goto state 52
-   yacc.py: 410:
-   yacc.py: 411:State  : 52
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID . LexToken(FROM,'FROM',8,123)
-   yacc.py: 445:Action : Shift and goto state 74
-   yacc.py: 410:
-   yacc.py: 411:State  : 74
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM . LexToken(PID,'tc',8,128)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM PID . LexToken(LBR,'[',8,130)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM PID LBR . LexToken(NUM,0,8,131)
-   yacc.py: 445:Action : Shift and goto state 76
-   yacc.py: 410:
-   yacc.py: 411:State  : 76
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM PID LBR NUM . LexToken(RBR,']',8,132)
-   yacc.py: 445:Action : Shift and goto state 101
-   yacc.py: 410:
-   yacc.py: 411:State  : 101
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM PID LBR NUM RBR . LexToken(DOWNTO,'DOWNTO',8,134)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR NUM RBR] with ['tc','[',0,']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c140> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM identifier . LexToken(DOWNTO,'DOWNTO',8,134)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4c140>] and goto state 99
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c140> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 99
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value . LexToken(DOWNTO,'DOWNTO',8,134)
-   yacc.py: 445:Action : Shift and goto state 116
-   yacc.py: 410:
-   yacc.py: 411:State  : 116
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO . LexToken(PID,'tc',8,141)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO PID . LexToken(LBR,'[',8,143)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO PID LBR . LexToken(PID,'n',8,144)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO PID LBR PID . LexToken(RBR,']',8,145)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO PID LBR PID RBR . LexToken(DO,'DO',8,147)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tc','[','n',']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c13ec0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO identifier . LexToken(DO,'DO',8,147)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c13ec0>] and goto state 121
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c13ec0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 121
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value . LexToken(DO,'DO',8,147)
-   yacc.py: 445:Action : Shift and goto state 125
-   yacc.py: 410:
-   yacc.py: 411:State  : 125
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO . LexToken(PID,'ta',9,152)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO PID . LexToken(LBR,'[',9,154)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO PID LBR . LexToken(PID,'i',9,155)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO PID LBR PID . LexToken(RBR,']',9,156)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO PID LBR PID RBR . LexToken(ASSIGN,':=',9,157)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['ta','[','i',']'] and goto state 24
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c440> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier . LexToken(ASSIGN,':=',9,157)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN . LexToken(PID,'i',9,159)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN PID . LexToken(SEMICOLON,';',9,160)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['i'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c680> (<nodes.Identifier object at 0x720d10c4c6 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN identifier . LexToken(SEMICOLON,';',9,160)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4c680>] and goto state 64
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c680> (<nodes.Identifier object at 0x720d10c4c6 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN value . LexToken(SEMICOLON,';',9,160)
-   yacc.py: 469:Action : Reduce rule [expression -> value] with [<Identifier @ 0x720d10c4c680>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4c710> (<nodes.Expression object at 0x720d10c4c7 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN expression . LexToken(SEMICOLON,';',9,160)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO identifier ASSIGN expression SEMICOLON . LexToken(PID,'tb',10,164)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<ArrayPosition @ 0x720d10c4c440>,':=',<Expression @ 0x720d10c4c710>,';'] and goto state 23
-   yacc.py: 506:Result : <Assign @ 0x720d10c4c2c0> (<nodes.Assign object at 0x720d10c4c2c0>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO command . LexToken(PID,'tb',10,164)
-   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Assign @ 0x720d10c4c2c0>] and goto state 127
-   yacc.py: 506:Result : <Commands @ 0x720d10c4c6b0> (<nodes.Commands object at 0x720d10c4c6b0 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 127
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands . LexToken(PID,'tb',10,164)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands PID . LexToken(LBR,'[',10,166)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands PID LBR . LexToken(PID,'i',10,167)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands PID LBR PID . LexToken(RBR,']',10,168)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands PID LBR PID RBR . LexToken(ASSIGN,':=',10,169)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tb','[','i',']'] and goto state 24
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c350> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier . LexToken(ASSIGN,':=',10,169)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN . LexToken(PID,'n',10,171)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN PID . LexToken(SUB,'-',10,172)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c890> (<nodes.Identifier object at 0x720d10c4c8 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN identifier . LexToken(SUB,'-',10,172)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4c890>] and goto state 64
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c890> (<nodes.Identifier object at 0x720d10c4c8 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN value . LexToken(SUB,'-',10,172)
-   yacc.py: 445:Action : Shift and goto state 86
-   yacc.py: 410:
-   yacc.py: 411:State  : 86
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN value SUB . LexToken(PID,'i',10,173)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN value SUB PID . LexToken(SEMICOLON,';',10,174)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['i'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c860> (<nodes.Identifier object at 0x720d10c4c8 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN value SUB identifier . LexToken(SEMICOLON,';',10,174)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4c860>] and goto state 107
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c860> (<nodes.Identifier object at 0x720d10c4c8 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 107
-   yacc.py: 430:Defaulted state 107: Reduce using 33
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN value SUB value . LexToken(SEMICOLON,';',10,174)
-   yacc.py: 469:Action : Reduce rule [expression -> value SUB value] with [<Identifier @ 0x720d10c4c890>,'-',<Identifier @ 0x720d10c4c860>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4c8f0> (<nodes.Expression object at 0x720d10c4c8 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN expression . LexToken(SEMICOLON,';',10,174)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands identifier ASSIGN expression SEMICOLON . LexToken(ENDFOR,'ENDFOR',12,189)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<ArrayPosition @ 0x720d10c4c350>,':=',<Expression @ 0x720d10c4c8f0>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c4c500> (<nodes.Assign object at 0x720d10c4c500>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands command . LexToken(ENDFOR,'ENDFOR',12,189)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c4c6b0>,<Assign @ 0x720d10c4c500>] and goto state 127
-   yacc.py: 506:Result : <Commands @ 0x720d10c4c6b0> (<nodes.Commands object at 0x720d10c4c6b0 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 127
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands . LexToken(ENDFOR,'ENDFOR',12,189)
-   yacc.py: 445:Action : Shift and goto state 129
-   yacc.py: 410:
-   yacc.py: 411:State  : 129
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value DOWNTO value DO commands ENDFOR . LexToken(WRITE,'WRITE',13,197)
-   yacc.py: 469:Action : Reduce rule [command -> FOR PID FROM value DOWNTO value DO commands ENDFOR] with ['FOR','i','FROM',<ArrayPosition @ 0x720d10c4c140>,'DOWNTO',<ArrayPosition @ 0x720d10c13ec0>,'DO',<Commands @ 0x720d10c4c6b0>,'ENDFOR'] and goto state 43
-   yacc.py: 506:Result : <ForDownto @ 0x720d10c4c7a0> (<nodes.ForDownto object at 0x720d10c4c7a ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(WRITE,'WRITE',13,197)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<ForDownto @ 0x720d10c4c7a0>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(WRITE,'WRITE',13,197)
-   yacc.py: 445:Action : Shift and goto state 32
-   yacc.py: 410:
-   yacc.py: 411:State  : 32
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WRITE . LexToken(NUM,2,13,203)
-   yacc.py: 445:Action : Shift and goto state 47
-   yacc.py: 410:
-   yacc.py: 411:State  : 47
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WRITE NUM . LexToken(SEMICOLON,';',13,204)
-   yacc.py: 469:Action : Reduce rule [value -> NUM] with [2] and goto state 56
-   yacc.py: 506:Result : <int @ 0xb359c8> (2)
-   yacc.py: 410:
-   yacc.py: 411:State  : 56
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WRITE value . LexToken(SEMICOLON,';',13,204)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ PID . LexToken(SEMICOLON,';',5,86)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['a'] and goto state 55
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5dbdd0> (<nodes.Identifier object at 0x77d7ab5dbd ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 55
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ identifier . LexToken(SEMICOLON,';',5,86)
    yacc.py: 445:Action : Shift and goto state 80
    yacc.py: 410:
    yacc.py: 411:State  : 80
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WRITE value SEMICOLON . LexToken(PID,'j',14,214)
-   yacc.py: 469:Action : Reduce rule [command -> WRITE value SEMICOLON] with ['WRITE',2,';'] and goto state 43
-   yacc.py: 506:Result : <Write @ 0x720d10c4d790> (<nodes.Write object at 0x720d10c4d790>)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN READ identifier SEMICOLON . LexToken(READ,'READ',6,90)
+   yacc.py: 469:Action : Reduce rule [command -> READ identifier SEMICOLON] with ['READ',<Identifier @ 0x77d7ab5dbdd0>,';'] and goto state 23
+   yacc.py: 506:Result : <Read @ 0x77d7ab5fd9d0> (<nodes.Read object at 0x77d7ab5fd9d0>)
    yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(PID,'j',14,214)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<Write @ 0x720d10c4d790>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
+   yacc.py: 411:State  : 23
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN command . LexToken(READ,'READ',6,90)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Read @ 0x77d7ab5fd9d0>] and goto state 39
+   yacc.py: 506:Result : <Commands @ 0x77d7ab716f90> (<nodes.Commands object at 0x77d7ab716f90 ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(PID,'j',14,214)
-   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 411:State  : 39
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(READ,'READ',6,90)
+   yacc.py: 445:Action : Shift and goto state 31
    yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands PID . LexToken(ASSIGN,':=',14,215)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['j'] and goto state 24
-   yacc.py: 506:Result : <Identifier @ 0x720d10ffc4d0> (<nodes.Identifier object at 0x720d10ffc4 ...)
+   yacc.py: 411:State  : 31
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands READ . LexToken(PID,'b',6,95)
+   yacc.py: 445:Action : Shift and goto state 48
    yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier . LexToken(ASSIGN,':=',14,215)
-   yacc.py: 445:Action : Shift and goto state 44
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands READ PID . LexToken(SEMICOLON,';',6,96)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['b'] and goto state 55
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5dbe90> (<nodes.Identifier object at 0x77d7ab5dbe ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN . LexToken(PID,'tc',14,217)
-   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 411:State  : 55
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands READ identifier . LexToken(SEMICOLON,';',6,96)
+   yacc.py: 445:Action : Shift and goto state 80
    yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID . LexToken(LBR,'[',14,219)
-   yacc.py: 445:Action : Shift and goto state 53
+   yacc.py: 411:State  : 80
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands READ identifier SEMICOLON . LexToken(FOR,'FOR',7,100)
+   yacc.py: 469:Action : Reduce rule [command -> READ identifier SEMICOLON] with ['READ',<Identifier @ 0x77d7ab5dbe90>,';'] and goto state 42
+   yacc.py: 506:Result : <Read @ 0x77d7ab5fda30> (<nodes.Read object at 0x77d7ab5fda30>)
    yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR . LexToken(PID,'n',14,220)
+   yacc.py: 411:State  : 42
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(FOR,'FOR',7,100)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x77d7ab716f90>,<Read @ 0x77d7ab5fda30>] and goto state 39
+   yacc.py: 506:Result : <Commands @ 0x77d7ab716f90> (<nodes.Commands object at 0x77d7ab716f90 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 39
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(FOR,'FOR',7,100)
+   yacc.py: 445:Action : Shift and goto state 28
+   yacc.py: 410:
+   yacc.py: 411:State  : 28
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR . LexToken(PID,'i',7,104)
+   yacc.py: 445:Action : Shift and goto state 51
+   yacc.py: 410:
+   yacc.py: 411:State  : 51
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID . LexToken(FROM,'FROM',7,106)
    yacc.py: 445:Action : Shift and goto state 75
    yacc.py: 410:
    yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR PID . LexToken(RBR,']',14,221)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN PID LBR PID RBR . LexToken(SEMICOLON,';',14,222)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tc','[','n',']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c9b0> (<nodes.ArrayPosition object at 0x720d10c ...)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM . LexToken(PID,'a',7,111)
+   yacc.py: 445:Action : Shift and goto state 48
    yacc.py: 410:
    yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN identifier . LexToken(SEMICOLON,';',14,222)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4c9b0>] and goto state 64
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c9b0> (<nodes.ArrayPosition object at 0x720d10c ...)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM PID . LexToken(TO,'TO',7,113)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['a'] and goto state 47
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5fdac0> (<nodes.Identifier object at 0x77d7ab5fda ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN value . LexToken(SEMICOLON,';',14,222)
-   yacc.py: 469:Action : Reduce rule [expression -> value] with [<ArrayPosition @ 0x720d10c4c9b0>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4c260> (<nodes.Expression object at 0x720d10c4c2 ...)
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM identifier . LexToken(TO,'TO',7,113)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x77d7ab5fdac0>] and goto state 101
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5fdac0> (<nodes.Identifier object at 0x77d7ab5fda ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression . LexToken(SEMICOLON,';',14,222)
-   yacc.py: 445:Action : Shift and goto state 84
+   yacc.py: 411:State  : 101
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value . LexToken(TO,'TO',7,113)
+   yacc.py: 445:Action : Shift and goto state 117
    yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands identifier ASSIGN expression SEMICOLON . LexToken(WHILE,'WHILE',15,232)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x720d10ffc4d0>,':=',<Expression @ 0x720d10c4c260>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c4c950> (<nodes.Assign object at 0x720d10c4c950>)
+   yacc.py: 411:State  : 117
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO . LexToken(PID,'b',7,116)
+   yacc.py: 445:Action : Shift and goto state 48
+   yacc.py: 410:
+   yacc.py: 411:State  : 48
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO PID . LexToken(DO,'DO',7,118)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['b'] and goto state 47
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5dbfb0> (<nodes.Identifier object at 0x77d7ab5dbf ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 47
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO identifier . LexToken(DO,'DO',7,118)
+   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x77d7ab5dbfb0>] and goto state 123
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5dbfb0> (<nodes.Identifier object at 0x77d7ab5dbf ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 123
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value . LexToken(DO,'DO',7,118)
+   yacc.py: 445:Action : Shift and goto state 127
+   yacc.py: 410:
+   yacc.py: 411:State  : 127
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO . LexToken(PID,'i',8,125)
+   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 410:
+   yacc.py: 411:State  : 29
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO PID . LexToken(ASSIGN,':=',8,126)
+   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['i'] and goto state 24
+   yacc.py: 506:Result : <Identifier @ 0x77d7ab5fc0e0> (<nodes.Identifier object at 0x77d7ab5fc0 ...)
+   yacc.py: 410:
+   yacc.py: 411:State  : 24
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier . LexToken(ASSIGN,':=',8,126)
+   yacc.py: 445:Action : Shift and goto state 43
    yacc.py: 410:
    yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(WHILE,'WHILE',15,232)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<Assign @ 0x720d10c4c950>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(WHILE,'WHILE',15,232)
-   yacc.py: 445:Action : Shift and goto state 26
-   yacc.py: 410:
-   yacc.py: 411:State  : 26
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE . LexToken(PID,'j',15,238)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE PID . LexToken(LEQ,'<=',15,239)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['j'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c2f0> (<nodes.Identifier object at 0x720d10c4c2 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE identifier . LexToken(LEQ,'<=',15,239)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4c2f0>] and goto state 46
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c2f0> (<nodes.Identifier object at 0x720d10c4c2 ...)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier ASSIGN . LexToken(NUM,1,8,128)
+   yacc.py: 445:Action : Shift and goto state 46
    yacc.py: 410:
    yacc.py: 411:State  : 46
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value . LexToken(LEQ,'<=',15,239)
-   yacc.py: 445:Action : Shift and goto state 71
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier ASSIGN NUM . LexToken(SEMICOLON,';',8,129)
+   yacc.py: 469:Action : Reduce rule [value -> NUM] with [1] and goto state 65
+   yacc.py: 506:Result : <int @ 0xb369a8> (1)
    yacc.py: 410:
-   yacc.py: 411:State  : 71
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ . LexToken(PID,'tc',15,241)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ PID . LexToken(LBR,'[',15,243)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ PID LBR . LexToken(NUM,0,15,244)
-   yacc.py: 445:Action : Shift and goto state 76
-   yacc.py: 410:
-   yacc.py: 411:State  : 76
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ PID LBR NUM . LexToken(RBR,']',15,245)
-   yacc.py: 445:Action : Shift and goto state 101
-   yacc.py: 410:
-   yacc.py: 411:State  : 101
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ PID LBR NUM RBR . LexToken(DO,'DO',15,247)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR NUM RBR] with ['tc','[',0,']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c3b0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ identifier . LexToken(DO,'DO',15,247)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4c3b0>] and goto state 96
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c3b0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 96
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE value LEQ value . LexToken(DO,'DO',15,247)
-   yacc.py: 469:Action : Reduce rule [condition -> value LEQ value] with [<Identifier @ 0x720d10c4c2f0>,'<=',<ArrayPosition @ 0x720d10c4c3b0>] and goto state 50
-   yacc.py: 506:Result : <Condition @ 0x720d10c4c110> (<nodes.Condition object at 0x720d10c4c11 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 50
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition . LexToken(DO,'DO',15,247)
-   yacc.py: 445:Action : Shift and goto state 72
-   yacc.py: 410:
-   yacc.py: 411:State  : 72
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO . LexToken(PID,'tc',17,277)
-   yacc.py: 445:Action : Shift and goto state 29
-   yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO PID . LexToken(LBR,'[',17,279)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO PID LBR . LexToken(PID,'j',17,280)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO PID LBR PID . LexToken(RBR,']',17,281)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO PID LBR PID RBR . LexToken(ASSIGN,':=',17,282)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tc','[','j',']'] and goto state 24
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c1d0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier . LexToken(ASSIGN,':=',17,282)
-   yacc.py: 445:Action : Shift and goto state 44
-   yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN . LexToken(PID,'ta',17,284)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN PID . LexToken(LBR,'[',17,286)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN PID LBR . LexToken(PID,'j',17,287)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN PID LBR PID . LexToken(RBR,']',17,288)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN PID LBR PID RBR . LexToken(ADD,'+',17,289)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['ta','[','j',']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4cad0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN identifier . LexToken(ADD,'+',17,289)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4cad0>] and goto state 64
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4cad0> (<nodes.ArrayPosition object at 0x720d10c ...)
+   yacc.py: 411:State  : 65
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier ASSIGN value . LexToken(SEMICOLON,';',8,129)
+   yacc.py: 469:Action : Reduce rule [expression -> value] with [1] and goto state 64
+   yacc.py: 506:Result : <Expression @ 0x77d7ab5fc380> (<nodes.Expression object at 0x77d7ab5fc3 ...)
    yacc.py: 410:
    yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value . LexToken(ADD,'+',17,289)
-   yacc.py: 445:Action : Shift and goto state 85
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier ASSIGN expression . LexToken(SEMICOLON,';',8,129)
+   yacc.py: 445:Action : Shift and goto state 86
    yacc.py: 410:
-   yacc.py: 411:State  : 85
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD . LexToken(PID,'tb',17,290)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD PID . LexToken(LBR,'[',17,292)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD PID LBR . LexToken(PID,'j',17,293)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD PID LBR PID . LexToken(RBR,']',17,294)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD PID LBR PID RBR . LexToken(SEMICOLON,';',17,295)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tb','[','j',']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c4a0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD identifier . LexToken(SEMICOLON,';',17,295)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4c4a0>] and goto state 106
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c4a0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 106
-   yacc.py: 430:Defaulted state 106: Reduce using 32
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN value ADD value . LexToken(SEMICOLON,';',17,295)
-   yacc.py: 469:Action : Reduce rule [expression -> value ADD value] with [<ArrayPosition @ 0x720d10c4cad0>,'+',<ArrayPosition @ 0x720d10c4c4a0>] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4cc50> (<nodes.Expression object at 0x720d10c4cc ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN expression . LexToken(SEMICOLON,';',17,295)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO identifier ASSIGN expression SEMICOLON . LexToken(PID,'j',18,309)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<ArrayPosition @ 0x720d10c4c1d0>,':=',<Expression @ 0x720d10c4cc50>,';'] and goto state 23
-   yacc.py: 506:Result : <Assign @ 0x720d10c4c4d0> (<nodes.Assign object at 0x720d10c4c4d0>)
+   yacc.py: 411:State  : 86
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO identifier ASSIGN expression SEMICOLON . LexToken(ENDFOR,'ENDFOR',9,133)
+   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x77d7ab5fc0e0>,':=',<Expression @ 0x77d7ab5fc380>,';'] and goto state 23
+   yacc.py: 506:Result : <Assign @ 0x77d7ab5fc2c0> (<nodes.Assign object at 0x77d7ab5fc2c0>)
    yacc.py: 410:
    yacc.py: 411:State  : 23
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO command . LexToken(PID,'j',18,309)
-   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Assign @ 0x720d10c4c4d0>] and goto state 97
-   yacc.py: 506:Result : <Commands @ 0x720d10c4cb90> (<nodes.Commands object at 0x720d10c4cb90 ...)
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO command . LexToken(ENDFOR,'ENDFOR',9,133)
+   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Assign @ 0x77d7ab5fc2c0>] and goto state 129
+   yacc.py: 506:Result : <Commands @ 0x77d7ab5fc410> (<nodes.Commands object at 0x77d7ab5fc410 ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 97
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands . LexToken(PID,'j',18,309)
-   yacc.py: 445:Action : Shift and goto state 29
+   yacc.py: 411:State  : 129
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO commands . LexToken(ENDFOR,'ENDFOR',9,133)
+   yacc.py: 445:Action : Shift and goto state 131
    yacc.py: 410:
-   yacc.py: 411:State  : 29
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands PID . LexToken(ASSIGN,':=',18,310)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['j'] and goto state 24
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4cb30> (<nodes.Identifier object at 0x720d10c4cb ...)
+   yacc.py: 411:State  : 131
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO commands ENDFOR . LexToken(END,'END',10,140)
+   yacc.py: 469:Action : Reduce rule [command -> FOR PID FROM value TO value DO commands ENDFOR] with ['FOR','i','FROM',<Identifier @ 0x77d7ab5fdac0>,'TO',<Identifier @ 0x77d7ab5dbfb0>,'DO',<Commands @ 0x77d7ab5fc410>,'ENDFOR'] and goto state 42
+   yacc.py: 506:Result : <ForTo @ 0x77d7ab5fc3b0> (<nodes.ForTo object at 0x77d7ab5fc3b0>)
    yacc.py: 410:
-   yacc.py: 411:State  : 24
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier . LexToken(ASSIGN,':=',18,310)
-   yacc.py: 445:Action : Shift and goto state 44
+   yacc.py: 411:State  : 42
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(END,'END',10,140)
+   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x77d7ab716f90>,<ForTo @ 0x77d7ab5fc3b0>] and goto state 39
+   yacc.py: 506:Result : <Commands @ 0x77d7ab716f90> (<nodes.Commands object at 0x77d7ab716f90 ...)
    yacc.py: 410:
-   yacc.py: 411:State  : 44
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN . LexToken(PID,'j',18,312)
-   yacc.py: 445:Action : Shift and goto state 49
+   yacc.py: 411:State  : 39
+   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(END,'END',10,140)
+   yacc.py: 445:Action : Shift and goto state 62
    yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN PID . LexToken(ADD,'+',18,313)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['j'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4cbc0> (<nodes.Identifier object at 0x720d10c4cb ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN identifier . LexToken(ADD,'+',18,313)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4cbc0>] and goto state 64
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4cbc0> (<nodes.Identifier object at 0x720d10c4cb ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 64
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN value . LexToken(ADD,'+',18,313)
-   yacc.py: 445:Action : Shift and goto state 85
-   yacc.py: 410:
-   yacc.py: 411:State  : 85
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN value ADD . LexToken(NUM,1,18,314)
-   yacc.py: 445:Action : Shift and goto state 47
-   yacc.py: 410:
-   yacc.py: 411:State  : 47
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN value ADD NUM . LexToken(SEMICOLON,';',18,315)
-   yacc.py: 469:Action : Reduce rule [value -> NUM] with [1] and goto state 106
-   yacc.py: 506:Result : <int @ 0xb359a8> (1)
-   yacc.py: 410:
-   yacc.py: 411:State  : 106
-   yacc.py: 430:Defaulted state 106: Reduce using 32
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN value ADD value . LexToken(SEMICOLON,';',18,315)
-   yacc.py: 469:Action : Reduce rule [expression -> value ADD value] with [<Identifier @ 0x720d10c4cbc0>,'+',1] and goto state 63
-   yacc.py: 506:Result : <Expression @ 0x720d10c4ccb0> (<nodes.Expression object at 0x720d10c4cc ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 63
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN expression . LexToken(SEMICOLON,';',18,315)
-   yacc.py: 445:Action : Shift and goto state 84
-   yacc.py: 410:
-   yacc.py: 411:State  : 84
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands identifier ASSIGN expression SEMICOLON . LexToken(ENDWHILE,'ENDWHILE',20,331)
-   yacc.py: 469:Action : Reduce rule [command -> identifier ASSIGN expression SEMICOLON] with [<Identifier @ 0x720d10c4cb30>,':=',<Expression @ 0x720d10c4ccb0>,';'] and goto state 43
-   yacc.py: 506:Result : <Assign @ 0x720d10c4cd40> (<nodes.Assign object at 0x720d10c4cd40>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands command . LexToken(ENDWHILE,'ENDWHILE',20,331)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c4cb90>,<Assign @ 0x720d10c4cd40>] and goto state 97
-   yacc.py: 506:Result : <Commands @ 0x720d10c4cb90> (<nodes.Commands object at 0x720d10c4cb90 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 97
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands . LexToken(ENDWHILE,'ENDWHILE',20,331)
-   yacc.py: 445:Action : Shift and goto state 113
-   yacc.py: 410:
-   yacc.py: 411:State  : 113
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands WHILE condition DO commands ENDWHILE . LexToken(FOR,'FOR',22,355)
-   yacc.py: 469:Action : Reduce rule [command -> WHILE condition DO commands ENDWHILE] with ['WHILE',<Condition @ 0x720d10c4c110>,'DO',<Commands @ 0x720d10c4cb90>,'ENDWHILE'] and goto state 43
-   yacc.py: 506:Result : <WhileLoop @ 0x720d10c4cb60> (<nodes.WhileLoop object at 0x720d10c4cb6 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(FOR,'FOR',22,355)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<WhileLoop @ 0x720d10c4cb60>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(FOR,'FOR',22,355)
-   yacc.py: 445:Action : Shift and goto state 28
-   yacc.py: 410:
-   yacc.py: 411:State  : 28
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR . LexToken(PID,'i',22,359)
-   yacc.py: 445:Action : Shift and goto state 52
-   yacc.py: 410:
-   yacc.py: 411:State  : 52
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID . LexToken(FROM,'FROM',22,361)
-   yacc.py: 445:Action : Shift and goto state 74
-   yacc.py: 410:
-   yacc.py: 411:State  : 74
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM . LexToken(NUM,0,22,366)
-   yacc.py: 445:Action : Shift and goto state 47
-   yacc.py: 410:
-   yacc.py: 411:State  : 47
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM NUM . LexToken(TO,'TO',22,368)
-   yacc.py: 469:Action : Reduce rule [value -> NUM] with [0] and goto state 99
-   yacc.py: 506:Result : <int @ 0xb35988> (0)
-   yacc.py: 410:
-   yacc.py: 411:State  : 99
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value . LexToken(TO,'TO',22,368)
-   yacc.py: 445:Action : Shift and goto state 115
-   yacc.py: 410:
-   yacc.py: 411:State  : 115
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO . LexToken(PID,'n',22,371)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO PID . LexToken(DO,'DO',22,373)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID] with ['n'] and goto state 48
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c590> (<nodes.Identifier object at 0x720d10c4c5 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO identifier . LexToken(DO,'DO',22,373)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<Identifier @ 0x720d10c4c590>] and goto state 120
-   yacc.py: 506:Result : <Identifier @ 0x720d10c4c590> (<nodes.Identifier object at 0x720d10c4c5 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 120
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value . LexToken(DO,'DO',22,373)
-   yacc.py: 445:Action : Shift and goto state 124
-   yacc.py: 410:
-   yacc.py: 411:State  : 124
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO . LexToken(WRITE,'WRITE',24,390)
-   yacc.py: 445:Action : Shift and goto state 32
-   yacc.py: 410:
-   yacc.py: 411:State  : 32
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE . LexToken(PID,'tc',24,396)
-   yacc.py: 445:Action : Shift and goto state 49
-   yacc.py: 410:
-   yacc.py: 411:State  : 49
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE PID . LexToken(LBR,'[',24,398)
-   yacc.py: 445:Action : Shift and goto state 53
-   yacc.py: 410:
-   yacc.py: 411:State  : 53
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE PID LBR . LexToken(PID,'i',24,399)
-   yacc.py: 445:Action : Shift and goto state 75
-   yacc.py: 410:
-   yacc.py: 411:State  : 75
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE PID LBR PID . LexToken(RBR,']',24,400)
-   yacc.py: 445:Action : Shift and goto state 100
-   yacc.py: 410:
-   yacc.py: 411:State  : 100
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE PID LBR PID RBR . LexToken(SEMICOLON,';',24,401)
-   yacc.py: 469:Action : Reduce rule [identifier -> PID LBR PID RBR] with ['tc','[','i',']'] and goto state 48
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c8c0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 48
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE identifier . LexToken(SEMICOLON,';',24,401)
-   yacc.py: 469:Action : Reduce rule [value -> identifier] with [<ArrayPosition @ 0x720d10c4c8c0>] and goto state 56
-   yacc.py: 506:Result : <ArrayPosition @ 0x720d10c4c8c0> (<nodes.ArrayPosition object at 0x720d10c ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 56
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE value . LexToken(SEMICOLON,';',24,401)
-   yacc.py: 445:Action : Shift and goto state 80
-   yacc.py: 410:
-   yacc.py: 411:State  : 80
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO WRITE value SEMICOLON . LexToken(ENDFOR,'ENDFOR',25,404)
-   yacc.py: 469:Action : Reduce rule [command -> WRITE value SEMICOLON] with ['WRITE',<ArrayPosition @ 0x720d10c4c8c0>,';'] and goto state 23
-   yacc.py: 506:Result : <Write @ 0x720d10c4cd70> (<nodes.Write object at 0x720d10c4cd70>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 23
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO command . LexToken(ENDFOR,'ENDFOR',25,404)
-   yacc.py: 469:Action : Reduce rule [commands -> command] with [<Write @ 0x720d10c4cd70>] and goto state 126
-   yacc.py: 506:Result : <Commands @ 0x720d10c4c770> (<nodes.Commands object at 0x720d10c4c770 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 126
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO commands . LexToken(ENDFOR,'ENDFOR',25,404)
-   yacc.py: 445:Action : Shift and goto state 128
-   yacc.py: 410:
-   yacc.py: 411:State  : 128
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands FOR PID FROM value TO value DO commands ENDFOR . LexToken(END,'END',26,411)
-   yacc.py: 469:Action : Reduce rule [command -> FOR PID FROM value TO value DO commands ENDFOR] with ['FOR','i','FROM',0,'TO',<Identifier @ 0x720d10c4c590>,'DO',<Commands @ 0x720d10c4c770>,'ENDFOR'] and goto state 43
-   yacc.py: 506:Result : <ForTo @ 0x720d10c4cef0> (<nodes.ForTo object at 0x720d10c4cef0>)
-   yacc.py: 410:
-   yacc.py: 411:State  : 43
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands command . LexToken(END,'END',26,411)
-   yacc.py: 469:Action : Reduce rule [commands -> commands command] with [<Commands @ 0x720d10c13b30>,<ForTo @ 0x720d10c4cef0>] and goto state 40
-   yacc.py: 506:Result : <Commands @ 0x720d10c13b30> (<nodes.Commands object at 0x720d10c13b30 ...)
-   yacc.py: 410:
-   yacc.py: 411:State  : 40
-   yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands . LexToken(END,'END',26,411)
-   yacc.py: 445:Action : Shift and goto state 61
-   yacc.py: 410:
-   yacc.py: 411:State  : 61
-   yacc.py: 430:Defaulted state 61: Reduce using 5
+   yacc.py: 411:State  : 62
+   yacc.py: 430:Defaulted state 62: Reduce using 5
    yacc.py: 434:Stack  : procedures PROGRAM IS declarations BEGIN commands END . None
-   yacc.py: 469:Action : Reduce rule [main -> PROGRAM IS declarations BEGIN commands END] with ['PROGRAM','IS',<Declarations @ 0x720d10c13a70>,'BEGIN',<Commands @ 0x720d10c13b30>,'END'] and goto state 4
-   yacc.py: 506:Result : <Main @ 0x720d10c4cc80> (<nodes.Main object at 0x720d10c4cc80>)
+   yacc.py: 469:Action : Reduce rule [main -> PROGRAM IS declarations BEGIN commands END] with ['PROGRAM','IS',<Declarations @ 0x77d7ab5dbce0>,'BEGIN',<Commands @ 0x77d7ab716f90>,'END'] and goto state 4
+   yacc.py: 506:Result : <Main @ 0x77d7ab5fdaf0> (<nodes.Main object at 0x77d7ab5fdaf0>)
    yacc.py: 410:
    yacc.py: 411:State  : 4
    yacc.py: 430:Defaulted state 4: Reduce using 1
    yacc.py: 434:Stack  : procedures main . None
-   yacc.py: 469:Action : Reduce rule [program_all -> procedures main] with [<Procedures @ 0x720d10c13b60>,<Main @ 0x720d10c4cc80>] and goto state 1
-   yacc.py: 506:Result : <Program @ 0x720d10c13a40> (<nodes.Program object at 0x720d10c13a40>)
+   yacc.py: 469:Action : Reduce rule [program_all -> procedures main] with [<Procedures @ 0x77d7ab5dbd70>,<Main @ 0x77d7ab5fdaf0>] and goto state 1
+   yacc.py: 506:Result : <Program @ 0x77d7ab5dbcb0> (<nodes.Program object at 0x77d7ab5dbcb0>)
    yacc.py: 410:
    yacc.py: 411:State  : 1
    yacc.py: 434:Stack  : program_all . $end
-   yacc.py: 571:Done   : Returning <Program @ 0x720d10c13a40> (<nodes.Program object at 0x720d10c13a40>)
+   yacc.py: 571:Done   : Returning <Program @ 0x77d7ab5dbcb0> (<nodes.Program object at 0x77d7ab5dbcb0>)
    yacc.py: 572:PLY: PARSE DEBUG END
