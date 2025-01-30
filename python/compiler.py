@@ -20,7 +20,6 @@ tokens = (
     'ADD', 'SUB', 'MUL', 'DIV', 'MOD',
     'EQ', 'NEQ', 
     'GT', 'LT', 'GEQ', 'LEQ',
-    'COM',
     'ASSIGN', 'SEMICOLON', 'COMMA'
 )
 
@@ -103,7 +102,7 @@ def t_error(t):
 # * parser
 
 # tree = None
-literals = ":"
+literals = ":-"
 
 # program_all - the main rule
 # first declare the procedures, than the main function
@@ -116,6 +115,7 @@ def p_program_all(p):
 def p_procedures_decl(p):
     'procedures : procedures PROCEDURE proc_head IS declarations BEGIN commands END'
     p[1].add_procedure(nd.Procedure(p[3], p[5], p[7]))
+    p[0] = p[1]
 
 def p_procedures_no_decl(p):
     'procedures : procedures PROCEDURE proc_head IS BEGIN commands END'
@@ -181,7 +181,7 @@ def p_command_for_downto(p):
     p[0] = nd.ForDownto(p[2], p[4], p[6], p[8])
 
 def p_command_proc_call(p):
-    'command : proc_call'
+    'command : proc_call SEMICOLON'
     p[0] = p[1]
 
 def p_command_read(p):
@@ -201,6 +201,7 @@ def p_proc_head(p):
 # proc_call
 def p_proc_call(p):
     'proc_call : PID LPAR args RPAR'
+    # print("proc call")
     p[0] = nd.ProcCall(p[1], p[3])
 
 # declarations
@@ -211,7 +212,7 @@ def p_declarations_decl_pid(p):
 
 # declarations , pidentifier [ num : num ]
 def p_declarations_decl_tab(p):
-    '''declarations : declarations COMMA PID LBR NUM ':' NUM RBR '''
+    '''declarations : declarations COMMA PID LBR number ':' number RBR '''
     p[1].add_declaration(nd.Array(p[3], p[5], p[7]))
     p[0] = p[1]
 
@@ -222,7 +223,7 @@ def p_declarations_pid(p):
     p[0] = declarations
 
 def p_declarations_tab(p):
-    '''declarations :  PID LBR NUM ':' NUM RBR'''
+    '''declarations :  PID LBR number ':' number RBR'''
     declarations = nd.Declarations()
     declarations.add_declaration(nd.Array(p[1], p[3], p[5]))
     p[0] = declarations
@@ -232,38 +233,38 @@ def p_declarations_tab(p):
 
 
 def p_args_decl_ards_pid(p):
-    'args_decl : args_decl PID'
-    p[1].add_arg(p[2])
+    'args_decl : args_decl COMMA PID'
+    p[1].add_arg(p[3])
     p[0] = p[1]
 
 def p_args_decl_ards_tab(p):
-    'args_decl : args_decl T PID'
-    p[1].add_arg(nd.Array(p[3], None, None))
+    'args_decl : args_decl COMMA T PID'
+    p[1].add_arg(nd.Array(p[4], None, None))
     p[0] = p[1]
 
 def p_args_decl_pid(p):
     'args_decl : PID'
     ad = nd.ArgsDecl()
     ad.add_arg(p[1])
-    p[0] = p[1]
+    p[0] = ad
 
 def p_args_decl_tab(p):
     'args_decl : T PID'
     ad = nd.ArgsDecl()
     ad.add_arg(nd.Array(p[2], None, None))
-    p[0] = p[1]
+    p[0] = ad
 
 # args
 def p_args_args(p):
-    'args : args PID'
-    p[1].add_arg(p[2])
+    'args : args COMMA PID'
+    p[1].add_arg(p[3])
     p[0] = p[1]
 
 def p_args_pid(p):
     'args : PID'
     arg = nd.Args()
     arg.add_arg(p[1])
-    p[0] = p[1]
+    p[0] = arg
 
 # expression - assignment to variables
 def p_expr_value(p):
@@ -317,7 +318,7 @@ def p_cond_leq(p):
 
 # value
 def p_value_num(p):
-    'value : NUM'
+    'value : number'
     p[0] = p[1]
 
 def p_value_id(p):
@@ -334,8 +335,16 @@ def p_id_tab_pid(p):
     p[0] = nd.ArrayPosition(p[1], p[3])
 
 def p_id_tab_num(p):
-    'identifier : PID LBR NUM RBR'
+    'identifier : PID LBR number RBR'
     p[0] = nd.ArrayPosition(p[1], p[3])
+    
+def p_number_positive(p):
+    'number : NUM'
+    p[0] = p[1]
+    
+def p_number_negative(p):
+    '''number : SUB NUM'''
+    p[0] = 0 - p[2]
 
 # empty rule for use in later empty productions
 def p_empty(p):
@@ -347,6 +356,8 @@ def p_error(p):
         print('\nsyntax error: ', p.value)
     else:
         print(f'syntax error')
+
+
 
 # yacc.yacc(start='program_all')
 
@@ -363,7 +374,7 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/exampleA.imp", "r")
+f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/program2.imp", "r")
 text = f.read()
 
 # text = '''

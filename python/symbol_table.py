@@ -6,11 +6,11 @@ class Array:
         self.memory_location = memory_location
         
     def get_at(self, index):
-        if self.first_index <= index <= self.last_index:
-            return self.memory_location + index - self.first_index
-        else:
-            raise Exception("Index ", index, " not in array ", self.name, ". Array indexed from ", self.first_index, " to ", self.last_index)
-        
+        # if self.first_index <= index <= self.last_index:
+        #     return self.memory_location + index - self.first_index
+        # else:
+        #     raise Exception("Index ", index, " not in array ", self.name, ". Array indexed from ", self.first_index, " to ", self.last_index)
+        return self.memory_location + index - self.first_index
 
 class Variable:
     def __init__(self, name, memory_location):
@@ -28,18 +28,36 @@ class Iterator:
         self.memory_location = memory_location
         self.condition_location = condition_location
         
+class Reference:
+    def __init__(self, name, memory_location):
+        self.name = name
+        self.memory_location = memory_location
+        
+class Procedure:
+    def __init__(self, name, linenum, return_spot):
+        self.args = []
+        self.name = name
+        self.linenum = linenum
+        # fun fact: you can't name a variable "return"
+        self.return_spot = return_spot
+        
+        
+class ArrayReference:
+    def __init__(self, name, memory_location):
+        self.name = name
+        self.memory_location = memory_location
+    
+        
 
 class SymbolTable(dict):
     
-    # arbitrarily set at 10 for now
-    # TODO should probably be set at maximum number of arguments of any procedure + 1
-    # but not less than x
     
     
     # memory is virtually infinite so I will not be caring about optimizing its use
     first_available_memory = 10
     
     consts = {}
+    procedures = {}
     
     def __init__(self):
         super().__init__()
@@ -77,6 +95,7 @@ class SymbolTable(dict):
         
         self.setdefault(name, Iterator(name, self.first_available_memory, self.first_available_memory + 1))
         self.first_available_memory += 2
+        
     
     def get_variable(self, var):
         if var in self:
@@ -121,3 +140,70 @@ class SymbolTable(dict):
     def get_iterator_condition(self, iterator):
         if iterator in self:
             return self.get(iterator).condition_location
+        
+    def add_procedure(self, name, place):
+        if name in self.procedures:
+            raise Exception("Two procedures defined with the same name: " + name)
+        else:
+            self.procedures.setdefault(name, Procedure(name, place, self.first_available_memory))
+            self.first_available_memory += 1
+            
+    def add_proc_arg(self, proc, name):
+        if proc in self.procedures:
+            self.procedures.get(proc).args.append(self.get(name))
+            
+    def get_proc_arg(self, proc):
+        if proc in self.procedures:
+            return self.procedures.get(proc).args
+        
+        
+    def add_reference(self, name):
+        if name in self:
+            raise Exception("Reference with the same name as an already existing variable")
+        else:
+            self.setdefault(name, Reference(name, self.first_available_memory))
+            self.first_available_memory += 1
+
+    def add_array_reference(self, name):
+        if name in self:
+            raise Exception("Array reference with the same name as already existing variable")
+        else:
+            self.setdefault(name, ArrayReference(name, self.first_available_memory))
+            self.first_available_memory += 1
+            
+    def is_reference(self, name):
+        if name not in self:
+            raise Exception(f"REferring to an unalocated variable: {name}")
+        var = self.get(name)
+        if isinstance(var, Reference):
+            return True
+        # extend to arrays too?
+        else:
+            return False
+        
+    def is_iterator(self, name):
+        if name not in self:
+            raise Exception(f"REferring to an unalocated variable: {name}")
+        var = self.get(name)
+        if isinstance(var, Iterator):
+            return True
+        else:
+            return False
+        
+    def get_proc_position(self, name):
+        if name in self.procedures:
+            return self.procedures.get(name).linenum
+        
+    def get_return(self, proc):
+        if proc in self.procedures:
+            return self.procedures.get(proc).return_spot
+        
+    def is_array_reference(self, name):
+        if name not in self:
+            raise Exception(f"Referring to an unalocated array")
+        var = self.get(name)
+        if isinstance(var, ArrayReference):
+            return True
+        else:
+            return False
+        

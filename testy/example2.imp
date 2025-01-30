@@ -7,12 +7,14 @@ PROCEDURE pa(a,b) IS
 BEGIN
   a:=a+b;
   b:=a-b;
+  #WRITE 1;
 END
 
 PROCEDURE pb(a,b) IS
 BEGIN
   pa(a,b);
   pa(a,b);
+  #WRITE 2;
 END
 
 PROCEDURE pc(a,b) IS
@@ -20,6 +22,7 @@ BEGIN
   pb(a,b);
   pb(a,b);
   pb(a,b);
+  #WRITE 3;
 END
 
 PROCEDURE pd(a,b) IS
@@ -28,6 +31,7 @@ BEGIN
   pc(a,b);
   pc(a,b);
   pc(a,b);
+  #WRITE 4;
 END
 
 PROGRAM IS

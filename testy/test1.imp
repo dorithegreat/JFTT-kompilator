@@ -1,0 +1,8 @@
+PROGRAM IS
+    f[-2:-1], n
+BEGIN
+    f[-2] := 1;
+    f[-1] := 2;
+    n := -1;
+    WRITE f[n];
+END
