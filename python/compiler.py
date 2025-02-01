@@ -374,7 +374,7 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/program1.imp", "r")
+f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/test2.imp", "r")
 text = f.read()
 
 # text = '''

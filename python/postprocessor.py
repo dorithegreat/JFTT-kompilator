@@ -13,6 +13,9 @@ class Postprocessor:
             if line == "HALT":
                 return
             
+            if line == "HALF":
+                continue
+            
             command, argument = line.split()
             
             if command == "JUMP" and not self.isnumber(argument):

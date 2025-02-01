@@ -365,12 +365,76 @@ class CodeGenerator:
         
         elif expression.operator == "MUL":
             # TODO implement for all numbers
-            if expression.value1 == 2 or expression.value2 == 2:
+            if expression.value1 == 2:
                 inner_code.append(f"LOAD {self.symbols.get_variable(prefix + expression.value2.name)}")
                 inner_code.append(f"ADD {self.symbols.get_variable(prefix + expression.value2.name)}")
-                linenum += 2
-                return linenum, inner_code
+
+            elif expression.value2 == 2:
+                inner_code.append(f"LOAD {self.symbols.get_variable(prefix + expression.value1.name)}")
+                inner_code.append(f"ADD 0")
+
+            elif expression.value1 == 0 or expression.value2 == 0:
+                inner_code.append("SET 0")
+
+            elif expression.value1 == 1:
+                inner_code += self.load(expression.value2)
+            elif expression.value2 == 1:
+                inner_code += self.load(expression.value1)
+                
+            # TODO this is the place for all multiplication optimizations
             
+            else:
+                #* really lengthy but necessary for handling negative numbers
+                #* optimisation: check in preprocessing if this handling is needed at all
+                inner_code.append("SET 0")
+                inner_code.append("STORE 5")
+                inner_code.append("STORE 6") #sign flag
+                
+                inner_code += self.load(expression.value1, prefix)
+                inner_code.append("STORE 3")
+                inner_code.append("JPOS 6")
+                inner_code.append("SUB 3")
+                inner_code.append("SUB 3")
+                inner_code.append("STORE 3")
+                inner_code.append("SET 1") #negative flag
+                inner_code.append("STORE 6")
+                
+                inner_code += self.load(expression.value2, prefix)
+                inner_code.append("STORE 4")
+                inner_code.append("JPOS 7")
+                inner_code.append("SUB 4") #flip the sign
+                inner_code.append("SUB 4")
+                inner_code.append("STORE 4")
+                inner_code.append("SET 1") #if flag was 0 it will be 1, if it was 1 it will be 0
+                inner_code.append("SUB 6")
+                inner_code.append("STORE 6")
+                
+                inner_code.append("LOAD 4")                
+                inner_code.append("ADD 0")
+                inner_code.append("STORE 4")
+                inner_code.append("LOAD 3")
+                inner_code.append("HALF")
+                inner_code.append("JZERO 10")
+                inner_code.append("STORE 3")
+                inner_code.append("HALF")
+                inner_code.append("ADD 0")
+                inner_code.append("SUB 3")
+                inner_code.append("JZERO -10")
+                inner_code.append("LOAD 4")
+                inner_code.append("ADD 5")
+                inner_code.append("STORE 5")
+                inner_code.append("JUMP -14")
+
+                inner_code.append("LOAD 6")
+                inner_code.append("JZERO 5")
+                inner_code.append("LOAD 5")
+                inner_code.append("SUB 5")
+                inner_code.append("SUB 5")
+                inner_code.append("JUMP 2")
+                
+                inner_code.append("LOAD 5")
+                
+            return len(inner_code), inner_code
             
         
         elif expression.operator == "DIV":
@@ -379,6 +443,11 @@ class CodeGenerator:
                 inner_code.append("HALF")
                 linenum += 2
                 return linenum, inner_code
+            elif expression.value1 == 0:
+                inner_code.append("SET 0")
+            
+            else:
+                pass
         
         elif expression.operator == "MOD":
             # self.modulo()
