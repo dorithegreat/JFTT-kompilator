@@ -207,3 +207,10 @@ class SymbolTable(dict):
         else:
             return False
         
+        
+    def is_array(self, name):
+        if name in self:
+            if isinstance(self.get(name), Array):
+                return True
+            else:
+                return False

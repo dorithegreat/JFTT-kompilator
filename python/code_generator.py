@@ -128,11 +128,12 @@ class CodeGenerator:
                             inner_code.append(f"LOAD {self.symbols.get_variable(prefix + comm.args.arguments[i])}")
                         elif self.symbols.is_array_reference(prefix + comm.args.arguments[i]):
                             pass
-                        elif isinstance(comm.args.arguments[i], nd.Array):
-                            inner_code.append(f"SET {self.symbols.get_array_position(prefix + comm.args.arguments[i].name, 0)}")
+                        elif self.symbols.is_array(prefix + comm.args.arguments[i]):
+                            inner_code.append(f"SET {self.symbols.get_array_position(prefix + comm.args.arguments[i], 0)}")
                         else:                            
                             inner_code.append(f"SET {self.symbols.get_variable(prefix + comm.args.arguments[i])}")
-
+                        #? constants can't be passed to procedures
+                        
                         inner_code.append(f"STORE {self.symbols.get_variable(parameters[i].name)}")
                     
                     # will get swapped to current line number in postprocessing
@@ -272,31 +273,33 @@ class CodeGenerator:
         # store in memory so that it never changes with changes to the variable
         inner_code.append(f"STORE {self.symbols.get_iterator_condition(prefix + forloop.iterator)}")
         
-        if isinstance(forloop.start_value, nd.Identifier):
-            inner_code.append(f"LOAD  {self.symbols.get_variable(prefix + forloop.start_value.name)}")
-            linenum += 1
-        elif isinstance(forloop.start_value, nd.ArrayPosition):
-            if isinstance(forloop.start_value.position, int):
-                inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + forloop.start_value.name, forloop.start_value.position)}")
-                linenum += 1
-            else:
-                inner_code.append(f"SET {self.symbols.get_array_position(prefix + forloop.start_value.name, self.symbols.get_array_beginning(prefix + forloop.start_value.name))}")
-                inner_code.append(f"ADD {self.symbols.get_variable(prefix + forloop.start_value.position)}")
-                inner_code.append("STORE 1")
-                inner_code.append(f"LOADI 1")
+        inner_code += self.load(forloop.start_value, prefix)
+        
+        # if isinstance(forloop.start_value, nd.Identifier):
+        #     inner_code.append(f"LOAD  {self.symbols.get_variable(prefix + forloop.start_value.name)}")
+        #     linenum += 1
+        # elif isinstance(forloop.start_value, nd.ArrayPosition):
+        #     if isinstance(forloop.start_value.position, int):
+        #         inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + forloop.start_value.name, forloop.start_value.position)}")
+        #         linenum += 1
+        #     else:
+        #         inner_code.append(f"SET {self.symbols.get_array_position(prefix + forloop.start_value.name, self.symbols.get_array_beginning(prefix + forloop.start_value.name))}")
+        #         inner_code.append(f"ADD {self.symbols.get_variable(prefix + forloop.start_value.position)}")
+        #         inner_code.append("STORE 1")
+        #         inner_code.append(f"LOADI 1")
                 
-                linenum += 4
+        #         linenum += 4
                             
-        else:
-            if self.symbols.is_declared(forloop.start_value):
-                inner_code.append(f"LOAD  {self.symbols.get_const(forloop.start_value)}")
-                linenum += 1
-            else:
-                self.symbols.add_const(forloop.start_value)
-                inner_code.append(f"SET {forloop.start_value}")
-                inner_code.append(f"STORE {self.symbols.get_const(forloop.start_value)}")
-                # I *think* there's no need to load again afterwards because it stays in the accumulator
-                linenum += 2
+        # else:
+        #     if self.symbols.is_declared(forloop.start_value):
+        #         inner_code.append(f"LOAD  {self.symbols.get_const(forloop.start_value)}")
+        #         linenum += 1
+        #     else:
+        #         self.symbols.add_const(forloop.start_value)
+        #         inner_code.append(f"SET {forloop.start_value}")
+        #         inner_code.append(f"STORE {self.symbols.get_const(forloop.start_value)}")
+        #         # I *think* there's no need to load again afterwards because it stays in the accumulator
+        #         linenum += 2
             
         inner_code.append(f"STORE {self.symbols.get_iterator(prefix + forloop.iterator)}")
         linenum += 1
@@ -362,11 +365,13 @@ class CodeGenerator:
         
         elif expression.operator == "MUL":
             # TODO implement for all numbers
-            if expression.value1 == 2:
+            if expression.value1 == 2 or expression.value2 == 2:
                 inner_code.append(f"LOAD {self.symbols.get_variable(prefix + expression.value2.name)}")
                 inner_code.append(f"ADD {self.symbols.get_variable(prefix + expression.value2.name)}")
                 linenum += 2
                 return linenum, inner_code
+            
+            
         
         elif expression.operator == "DIV":
             if expression.value2 == 2:
@@ -479,12 +484,23 @@ class CodeGenerator:
             else:
                 inner_code.append(f"LOAD {self.symbols.get_variable(prefix + var.name)}")
         elif isinstance(var, nd.ArrayPosition):
-            if isinstance(var.position, int):
-                inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + var.name, var.position)}")
-            else:
-                inner_code.append(f"SET {self.symbols.get_array_position(prefix + var.name, 0)}")
-                inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
-                inner_code.append(f"LOADI 0")
+            if self.symbols.is_array_reference(prefix + var.name):
+                if isinstance(var.position, int):
+                    inner_code.append(f"SET {var.position}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.name)}")
+                    inner_code.append(f"LOADI 0")
+            
+                else:
+                    inner_code.append(f"LOAD {self.symbols.get_variable(prefix + var.name)}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                    inner_code.append("LOADI 0")
+            else:    
+                if isinstance(var.position, int):
+                    inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + var.name, var.position)}")
+                else:
+                    inner_code.append(f"SET {self.symbols.get_array_position(prefix + var.name, 0)}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                    inner_code.append(f"LOADI 0")
         else:
             if self.symbols.is_declared(var):
                 inner_code.append(f"LOAD {self.symbols.get_const(var)}")
@@ -507,12 +523,12 @@ class CodeGenerator:
             var1, var2 = var2, var1
         
         inner_code += self.load(var1, prefix)
+
         
         # TODO this is the place for all loading-related optimisations 
         
 
-            
-
+        
         if isinstance(var2, nd.Identifier):
             if self.symbols.is_reference(prefix + var2.name):
                 if something == "ADD":
@@ -524,17 +540,23 @@ class CodeGenerator:
             else:
                 inner_code.append(f"{something} {self.symbols.get_variable(prefix + var2.name)}")
         elif isinstance(var2, nd.ArrayPosition):
-            if isinstance(var2.position, int):
-                inner_code.append(f"{something} {self.symbols.get_array_position(prefix + var2.name, var2.position)}")
-            else:
-                #* this looks awfully inefficient
-                inner_code.append("STORE 1")
-                inner_code.append(f"SET {self.symbols.get_array_position(prefix + var2.name,0)}")
-                inner_code.append(f"ADD {self.symbols.get_variable(prefix + var2.position)}")
-                inner_code.append("LOADI 0")
-                inner_code.append("STORE 2")
-                inner_code.append("LOAD 1")
-                inner_code.append(f"{something} 2")
+            inner_code.append("STORE 1")
+            inner_code += self.load(var2, prefix)
+            inner_code.append("STORE 2")
+            inner_code.append("LOAD 1")
+            inner_code.append(f"{something} 2")
+            
+            # if isinstance(var2.position, int):
+            #     inner_code.append(f"{something} {self.symbols.get_array_position(prefix + var2.name, var2.position)}")
+            # else:
+            #     #* this looks awfully inefficient
+            #     inner_code.append("STORE 1")
+            #     inner_code.append(f"SET {self.symbols.get_array_position(prefix + var2.name,0)}")
+            #     inner_code.append(f"ADD {self.symbols.get_variable(prefix + var2.position)}")
+            #     inner_code.append("LOADI 0")
+            #     inner_code.append("STORE 2")
+            #     inner_code.append("LOAD 1")
+            #     inner_code.append(f"{something} 2")
         else:
             if self.symbols.is_declared(var2):
                 inner_code.append(f"{something} {self.symbols.get_const(var2)}")
@@ -550,12 +572,29 @@ class CodeGenerator:
     
     def store(self, var, prefix):
         inner_code = []
-
-
-            
+       
         if isinstance(var, nd.ArrayPosition):
-            if self.symbols.is_array_reference(var):
-                pass
+            if self.symbols.is_array_reference(prefix + var.name):
+                if isinstance(var.position, int):
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"SET {var.position}")
+                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.name)}")
+                    inner_code.append("STORE 2")
+                    inner_code.append("LOAD 1")
+                    inner_code.append("STOREI 2")
+                    
+                else:
+                    inner_code.append("STORE 1")
+                    inner_code.append(f"LOAD {self.symbols.get_variable(prefix + var.name)}")
+                    
+                    if self.symbols.is_reference(prefix + var.position):
+                        inner_code.append(f"ADDI {self.symbols.get_variable(prefix + var.position)}")
+                    else:
+                        inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                    
+                    inner_code.append("STORE 2")
+                    inner_code.append("LOAD 1")
+                    inner_code.append("STOREI 2")
             else: 
                 if isinstance(var.position, int):
                     inner_code.append(f"STORE {self.symbols.get_array_position(prefix + var.name, var.position)}")
