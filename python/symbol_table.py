@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 class Array:
     def __init__(self, name, first_index, last_index, memory_location):
         self.name = name
@@ -13,9 +15,10 @@ class Array:
         return self.memory_location + index - self.first_index
 
 class Variable:
-    def __init__(self, name, memory_location):
+    def __init__(self, name, memory_location, initialized : bool):
         self.name = name
         self.memory_location = memory_location
+        self.initialized = initialized
         
 class Constant:
     def __init__(self, value, memory_location):
@@ -64,9 +67,9 @@ class SymbolTable(dict):
         
     def add_variable(self, name):
         if name in self:
-            raise Exception("Redeclaration of variable ", name)
+            raise Exception(f"Redeclaration of variable {name}")
         
-        self.setdefault(name, Variable(name, self.first_available_memory))
+        self.setdefault(name, Variable(name, self.first_available_memory, False))
         self.first_available_memory += 1
         
         
@@ -113,6 +116,9 @@ class SymbolTable(dict):
         
     def get_array_position(self, arr, pos):
         if arr in self:
+            if not isinstance(self.get(arr), Array):
+                raise Exception(f"Trying to access an index of a variable {arr} which is not an array")
+            
             return self.get(arr).get_at(pos)
         
     def get_array_beginning(self, arr):
@@ -143,7 +149,7 @@ class SymbolTable(dict):
         
     def add_procedure(self, name, place):
         if name in self.procedures:
-            raise Exception("Two procedures defined with the same name: " + name)
+            raise Exception("Two procedures defined with the same name " + name)
         else:
             self.procedures.setdefault(name, Procedure(name, place, self.first_available_memory))
             self.first_available_memory += 1
@@ -155,25 +161,28 @@ class SymbolTable(dict):
     def get_proc_arg(self, proc):
         if proc in self.procedures:
             return self.procedures.get(proc).args
+        else:
+            raise Exception(f"Referring to an undefined procedure {proc}")
         
         
     def add_reference(self, name):
+        #can this even occur?
         if name in self:
-            raise Exception("Reference with the same name as an already existing variable")
+            raise Exception(f"Reference with the same name as an already existing variable ({name})")
         else:
             self.setdefault(name, Reference(name, self.first_available_memory))
             self.first_available_memory += 1
 
     def add_array_reference(self, name):
         if name in self:
-            raise Exception("Array reference with the same name as already existing variable")
+            raise Exception(f"Array reference with the same name as already existing variable ({name})")
         else:
             self.setdefault(name, ArrayReference(name, self.first_available_memory))
             self.first_available_memory += 1
             
     def is_reference(self, name):
         if name not in self:
-            raise Exception(f"REferring to an unalocated variable: {name}")
+            raise Exception(f"Referring to an unalocated variable: {name}")
         var = self.get(name)
         if isinstance(var, Reference):
             return True
@@ -183,7 +192,7 @@ class SymbolTable(dict):
         
     def is_iterator(self, name):
         if name not in self:
-            raise Exception(f"REferring to an unalocated variable: {name}")
+            raise Exception(f"Referring to an unalocated variable: {name}")
         var = self.get(name)
         if isinstance(var, Iterator):
             return True
@@ -200,7 +209,7 @@ class SymbolTable(dict):
         
     def is_array_reference(self, name):
         if name not in self:
-            raise Exception(f"Referring to an unalocated array")
+            raise Exception(f"Referring to an unalocated array {name}")
         var = self.get(name)
         if isinstance(var, ArrayReference):
             return True
@@ -214,3 +223,22 @@ class SymbolTable(dict):
                 return True
             else:
                 return False
+
+    def is_initialized(self, name):
+        if name in self:
+            if isinstance(self.get(name), Variable):
+                return self.get(name).initialized
+            else:
+                return True
+    
+    def mark_as_initialized(self,name):
+        if name in self and isinstance(self.get(name), Variable):
+            self.get(name).initialized = True
+        else:
+            raise Exception("no variable with such name")
+        
+if __name__ == "__main__":
+    s = SymbolTable()
+    s.add_variable("a")
+    s.mark_as_initialized("a")
+    print(s.is_initialized("a"))

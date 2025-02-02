@@ -374,7 +374,7 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/program3.imp", "r")
+f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/example1.imp", "r")
 text = f.read()
 
 # text = '''
@@ -387,8 +387,9 @@ text = f.read()
 # '''
 tree = parser.parse(text, debug=log)
 
-codegen = CodeGenerator(tree)
-codegen.generate()
+if tree is not None:
+    codegen = CodeGenerator(tree)
+    codegen.generate()
 
 # for line in codegen.code:
 #     print(line)

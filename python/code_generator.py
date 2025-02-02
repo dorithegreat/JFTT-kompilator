@@ -1,4 +1,4 @@
-from symbol_table import SymbolTable
+from symbol_table import SymbolTable, Array, ArrayReference
 from postprocessor import Postprocessor
 import nodes as nd
 
@@ -44,7 +44,7 @@ class CodeGenerator:
     def generate_procedure(self, procedure : nd.Procedure):
         procedure_name = procedure.proc_head.pid
         # starts with one for easy distinguishing from 0main
-        prefix = "1" + procedure_name + "_"
+        prefix = procedure_name + "_"
         
         # add arguments
         for var in procedure.proc_head.args_decl.arguments:
@@ -60,7 +60,7 @@ class CodeGenerator:
         if procedure.declaration is not None:
             for var in procedure.declaration.declarations:
                 if isinstance(var, nd.Array):
-                    pass        
+                    self.symbols.add_array(prefix + var.name, var.start, var.end)      
                 else:
                     self.symbols.add_variable(prefix + var)
         
@@ -69,7 +69,7 @@ class CodeGenerator:
         return inner_code
     
     def generate_main(self, main : nd.Main):
-        prefix = "0main_"
+        prefix = "main_"
         for var in main.declarations.declarations:
             if (isinstance(var, nd.Array)):
                 self.symbols.add_array(prefix + var.name, var.start, var.end)
@@ -120,10 +120,19 @@ class CodeGenerator:
                 # TODO only allow calling procedures defined earlier
                                 
                 parameters : list = self.symbols.get_proc_arg(comm.pid)
-                procedure_prefix = "1" + comm.pid + "_"
+                procedure_prefix = comm.pid + "_"
+                if procedure_prefix == prefix:
+                    raise Exception(f"Calling procedure {comm.pid} from within itself")
+                
                 
                 if len(comm.args.arguments) == len(parameters):
                     for i in range(len(comm.args.arguments)):
+                        if self.symbols.is_array(prefix + comm.args.arguments[i]) and not (isinstance(parameters[i], Array) or isinstance(parameters[i], ArrayReference)):
+                            raise Exception(f"Passing an array ({prefix + comm.args.arguments[i]}) to a procedure as an argument which should not be an array ({parameters[i].name})")
+                        elif isinstance(parameters[i], Array) or isinstance(parameters[i], ArrayReference) and not self.symbols.is_array(prefix + comm.args.arguments[i]):
+                            raise Exception(f"Passing a variable ({prefix + comm.args.arguments[i]}) to a procedure as an argument that should be an array ({parameters[i].name})")
+                        
+                        
                         if self.symbols.is_reference(prefix + comm.args.arguments[i]):
                             inner_code.append(f"LOAD {self.symbols.get_variable(prefix + comm.args.arguments[i])}")
                         elif self.symbols.is_array_reference(prefix + comm.args.arguments[i]):
@@ -132,6 +141,7 @@ class CodeGenerator:
                             inner_code.append(f"SET {self.symbols.get_array_position(prefix + comm.args.arguments[i], 0)}")
                         else:                            
                             inner_code.append(f"SET {self.symbols.get_variable(prefix + comm.args.arguments[i])}")
+                            self.symbols.mark_as_initialized(prefix + comm.args.arguments[i])
                         #? constants can't be passed to procedures
                         
                         inner_code.append(f"STORE {self.symbols.get_variable(parameters[i].name)}")
@@ -143,46 +153,22 @@ class CodeGenerator:
                 
             elif type(comm) == nd.Read:
                 # you cannot read a constant so there's need for the same conditions as in WRITE
-                # TODO you can read an array though
-                if isinstance(comm.variable, nd.ArrayPosition):
-                    inner_code.append(f"GET {self.symbols.get_array_position(prefix + comm.variable.name, comm.variable.position)}")
-                    linenum += 1
-                else:
-                    inner_code.append(f"GET {self.symbols.get_variable(prefix + comm.variable.name)}")
-                    linenum += 1
+                # TODO implement reading a reference variable
+                # if isinstance(comm.variable, nd.ArrayPosition):
+                #     inner_code.append(f"GET {self.symbols.get_array_position(prefix + comm.variable.name, comm.variable.position)}")
+                #     linenum += 1
+                # else:
+                #     inner_code.append(f"GET {self.symbols.get_variable(prefix + comm.variable.name)}")
+                #     linenum += 1
+                #     self.symbols.mark_as_initialized(comm.variable.name)
+                inner_code.append("GET 0")
+                inner_code += self.store(comm.variable, prefix)
+                linenum = len(inner_code)
                 
             elif type(comm) == nd.Write:
-                if isinstance(comm.value, nd.Identifier):
-                    inner_code.append(f"PUT {self.symbols.get_variable(prefix + comm.value.name)}")
-                    linenum += 1
-                elif isinstance(comm.value, nd.ArrayPosition):
-                    if isinstance(comm.value.position, int):
-                        inner_code.append(f"PUT {self.symbols.get_array_position(prefix + comm.value.name, comm.value.position)}")
-                        linenum += 1
-                    else:
-                        
-                        #? set the accumulator to the index of the start of the array
-                        # it is done by requesting the address of the first index of the array, in a roundabout way
-                        inner_code.append(f"SET {self.symbols.get_array_position(prefix + comm.value.name, 0)}")
-                        # add to it whatever value is hidden under the variable used as index
-                        inner_code.append(f"ADD {self.symbols.get_variable(prefix + comm.value.position)}")
-                        # put it down for easier access
-                        inner_code.append(f"STORE 1")
-                        # load from memory cell with index equal to the value in 1
-                        inner_code.append(f"LOADI 1")
-                        inner_code.append(f"PUT 0")
-                        
-                        linenum += 5
-                else:
-                    if self.symbols.is_declared(comm.value):
-                        inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
-                        linenum += 1
-                    else:
-                        self.symbols.add_const(comm.value)
-                        inner_code.append(f"SET {comm.value}")
-                        inner_code.append(f"STORE {self.symbols.get_const(comm.value)}")
-                        inner_code.append(f"PUT {self.symbols.get_const(comm.value)}")
-                        linenum += 3
+                inner_code += self.load(comm.value, prefix)
+                inner_code.append("PUT 0")
+                linenum = len(inner_code)
                     
                 
         
@@ -198,16 +184,18 @@ class CodeGenerator:
         
         
         lines_if, code_if = self.generate_commands(ifstatement.commands, prefix)
+        lines_if = len(code_if)
         
         if ifstatement.else_commands is not None:
             lines_else, code_else = self.generate_commands(ifstatement.else_commands, prefix)
+            lines_else = len(code_else)
         else:
             lines_else = 0
             code_else = []
         
         # if the condition is true don't jump, if it's false jump right after if block
         lines_cond, code_cond = self.generate_condition(ifstatement.condition, lines_if + 1, False, prefix) 
-        
+        lines_cond = len(code_cond)
         
         inner_code += code_cond
         linenum += lines_cond
@@ -246,6 +234,9 @@ class CodeGenerator:
         lines_comm, code_comm = self.generate_commands(repeat.commands, prefix)
         lines_cond, code_cond = self.generate_condition(repeat.condition, 0 - lines_comm, False, prefix)
         
+        lines_comm = len(code_comm)
+        lines_cond = len(code_cond)
+        
         #? this is repeat until - commands go first and only afterwards is the condition checked
         inner_code += code_comm
         linenum += lines_comm
@@ -265,7 +256,6 @@ class CodeGenerator:
             inner_code.append(f"STORE {self.symbols.get_const(1)}")
             linenum += 2
                     
-        # TODO make sure iterators can't be modified within the loop
         self.symbols.add_iterator(prefix + forloop.iterator)
         
         inner_code += self.load(forloop.end_value, prefix)
@@ -275,42 +265,19 @@ class CodeGenerator:
         inner_code.append(f"STORE {self.symbols.get_iterator_condition(prefix + forloop.iterator)}")
         
         inner_code += self.load(forloop.start_value, prefix)
+        linenum = len(inner_code)
         
-        # if isinstance(forloop.start_value, nd.Identifier):
-        #     inner_code.append(f"LOAD  {self.symbols.get_variable(prefix + forloop.start_value.name)}")
-        #     linenum += 1
-        # elif isinstance(forloop.start_value, nd.ArrayPosition):
-        #     if isinstance(forloop.start_value.position, int):
-        #         inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + forloop.start_value.name, forloop.start_value.position)}")
-        #         linenum += 1
-        #     else:
-        #         inner_code.append(f"SET {self.symbols.get_array_position(prefix + forloop.start_value.name, self.symbols.get_array_beginning(prefix + forloop.start_value.name))}")
-        #         inner_code.append(f"ADD {self.symbols.get_variable(prefix + forloop.start_value.position)}")
-        #         inner_code.append("STORE 1")
-        #         inner_code.append(f"LOADI 1")
-                
-        #         linenum += 4
-                            
-        # else:
-        #     if self.symbols.is_declared(forloop.start_value):
-        #         inner_code.append(f"LOAD  {self.symbols.get_const(forloop.start_value)}")
-        #         linenum += 1
-        #     else:
-        #         self.symbols.add_const(forloop.start_value)
-        #         inner_code.append(f"SET {forloop.start_value}")
-        #         inner_code.append(f"STORE {self.symbols.get_const(forloop.start_value)}")
-        #         # I *think* there's no need to load again afterwards because it stays in the accumulator
-        #         linenum += 2
-            
         inner_code.append(f"STORE {self.symbols.get_iterator(prefix + forloop.iterator)}")
         linenum += 1
         
+        linenum = len(inner_code)
         line_sub = linenum
         
         inner_code.append(f"SUB {self.symbols.get_iterator_condition(prefix + forloop.iterator)}")
         
 
         lines_comm, code_comm = self.generate_commands(forloop.commands, prefix)   
+        lines_comm = len(code_comm)
         
         if isinstance(forloop, nd.ForTo):
             inner_code.append(f"JPOS {lines_comm + 5}")
@@ -409,6 +376,14 @@ class CodeGenerator:
                 inner_code.append("SET 1") #if flag was 0 it will be 1, if it was 1 it will be 0
                 inner_code.append("SUB 6")
                 inner_code.append("STORE 6")
+                
+                inner_code.append("LOAD 3")
+                inner_code.append("HALF")
+                inner_code.append("ADD 0")
+                inner_code.append("SUB 3")
+                inner_code.append("JZERO 3")
+                inner_code.append("LOAD 4")
+                inner_code.append("STORE 5")
                 
                 inner_code.append("LOAD 4")                
                 inner_code.append("ADD 0")
@@ -551,6 +526,7 @@ class CodeGenerator:
             return linenum, inner_code
             
         
+    
     def load(self, var, prefix):
         inner_code = []
         
@@ -559,6 +535,12 @@ class CodeGenerator:
             if self.symbols.is_reference(prefix + var.name):
                 inner_code.append(f"LOADI {self.symbols.get_variable(prefix + var.name)}")
             else:
+                if self.symbols.is_array(prefix + var.name):
+                    raise Exception(f"Trying to assign value to array {prefix + var.name} without specifying index")
+                
+                if not self.symbols.is_initialized(prefix + var.name):
+                    raise Exception(f"Using an uninitialized variable {prefix + var.name}")
+                
                 inner_code.append(f"LOAD {self.symbols.get_variable(prefix + var.name)}")
         elif isinstance(var, nd.ArrayPosition):
             if self.symbols.is_array_reference(prefix + var.name):
@@ -569,14 +551,28 @@ class CodeGenerator:
             
                 else:
                     inner_code.append(f"LOAD {self.symbols.get_variable(prefix + var.name)}")
-                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                    if self.symbols.is_reference(prefix + var.position):
+                        inner_code.append(f"ADDI {self.symbols.get_variable(prefix + var.position)}")
+                    else:
+                        if not self.symbols.is_initialized(prefix + var.position):
+                            raise Exception(f"Using an uninitialized variable {prefix + var.position}")
+                        
+                        inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
                     inner_code.append("LOADI 0")
             else:    
                 if isinstance(var.position, int):
                     inner_code.append(f"LOAD {self.symbols.get_array_position(prefix + var.name, var.position)}")
                 else:
                     inner_code.append(f"SET {self.symbols.get_array_position(prefix + var.name, 0)}")
-                    inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                    
+                    if self.symbols.is_reference(prefix + var.position):
+                        inner_code.append(f"ADDI {self.symbols.get_variable(prefix + var.position)}")
+                    else:
+                        if not (self.symbols.is_initialized(prefix + var.position)):
+                            raise Exception(f"Using an uninitialized variable {prefix + var.position}")       
+                             
+                        inner_code.append(f"ADD {self.symbols.get_variable(prefix + var.position)}")
+                        
                     inner_code.append(f"LOADI 0")
         else:
             if self.symbols.is_declared(var):
@@ -622,19 +618,7 @@ class CodeGenerator:
             inner_code.append("STORE 2")
             inner_code.append("LOAD 1")
             inner_code.append(f"{something} 2")
-            
-            # if isinstance(var2.position, int):
-            #     inner_code.append(f"{something} {self.symbols.get_array_position(prefix + var2.name, var2.position)}")
-            # else:
-            #     #* this looks awfully inefficient
-            #     inner_code.append("STORE 1")
-            #     inner_code.append(f"SET {self.symbols.get_array_position(prefix + var2.name,0)}")
-            #     inner_code.append(f"ADD {self.symbols.get_variable(prefix + var2.position)}")
-            #     inner_code.append("LOADI 0")
-            #     inner_code.append("STORE 2")
-            #     inner_code.append("LOAD 1")
-            #     inner_code.append(f"{something} 2")
-        else:
+
             if self.symbols.is_declared(var2):
                 inner_code.append(f"{something} {self.symbols.get_const(var2)}")
             else:
@@ -690,6 +674,7 @@ class CodeGenerator:
                 raise Exception("Attempting to modify iterator")
             else:
                 inner_code.append(f"STORE {self.symbols.get_variable(prefix + var.name)}")
+                self.symbols.mark_as_initialized(prefix + var.name)
             
         return inner_code
                            
@@ -702,9 +687,14 @@ class CodeGenerator:
             inner_code.append(f"STORE {self.symbols.get_const(1)}")
         
         
+        inner_code.append("SET 0")
+        inner_code.append("STORE 5")
+        inner_code.append("STORE 7")
+        inner_code.append("STORE 8")
+        
         inner_code += self.load(var1, prefix)
         inner_code.append("STORE 3")
-        # inner_code.append("JZERO ") #TODO
+        inner_code.append("JZERO 63") #TODO
         inner_code.append("JPOS 6")
         inner_code.append("SUB 3") #flip the sign
         inner_code.append("SUB 3")
@@ -716,7 +706,7 @@ class CodeGenerator:
         inner_code += self.load(var2, prefix)
         inner_code.append("STORE 4")
         inner_code.append("STORE 6")
-        # inner_code.append("JZERO ") #TODO
+        inner_code.append("JZERO 53") #TODO
         inner_code.append("JPOS 9")
         inner_code.append("SUB 4")
         inner_code.append("SUB 4")
@@ -726,10 +716,7 @@ class CodeGenerator:
         inner_code.append("STORE 8") #flag if divisor is negative
         inner_code.append("SUB 7")
         inner_code.append("STORE 7")
-        
-        
-        inner_code.append("SET 0")
-        inner_code.append("STORE 5")
+    
         
         
         inner_code.append("LOAD 4")
@@ -777,6 +764,12 @@ class CodeGenerator:
         inner_code.append("SUB 3")
         inner_code.append("SUB 3")
         inner_code.append("STORE 3")
+        
+        inner_code.append("JUMP 4")
+        
+        inner_code.append("SET 0")
+        inner_code.append("STORE 3")
+        inner_code.append("STORE 5")
         
          
         
