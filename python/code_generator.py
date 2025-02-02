@@ -225,8 +225,9 @@ class CodeGenerator:
         inner_code = []
         
         lines_comm, code_comm = self.generate_commands(whileloop.commands, prefix)
+        lines_comm = len(code_comm)
         lines_cond, code_cond = self.generate_condition(whileloop.condition, lines_comm + 1, False, prefix)
-        
+        lines_cond = len(code_cond)
 
         inner_code += code_cond
         linenum += lines_cond
@@ -437,22 +438,29 @@ class CodeGenerator:
             return len(inner_code), inner_code
             
         
+        # TODO change SET to loading 0
         elif expression.operator == "DIV":
             if expression.value2 == 2:
-                inner_code.append(f"LOAD {self.symbols.get_variable(prefix + expression.value1.name)}")
+                inner_code += self.load(expression.value1, prefix)
                 inner_code.append("HALF")
-                linenum += 2
-                return linenum, inner_code
-            elif expression.value1 == 0:
+            elif expression.value1 == 0 or expression.value2 == 0:
+                inner_code.append("SET 0")
+
+            else:
+                inner_code += self.division(expression.value1, expression.value2, prefix)
+                
+                inner_code.append("LOAD 5")
+            
+            return len(inner_code), inner_code
+        
+        elif expression.operator == "MOD":
+            if expression.value1 == 0 or expression.value2 == 0:
                 inner_code.append("SET 0")
             
             else:
-                pass
-        
-        elif expression.operator == "MOD":
-            # self.modulo()
-            
-            pass
+                inner_code += self.division(expression.value1, expression.value2, prefix)
+                inner_code.append("LOAD 3")
+            return len(inner_code), inner_code
         
     def generate_condition(self, condition : nd.Condition, jump, mode : bool, prefix):
         # counter of lines added by this function
@@ -685,3 +693,91 @@ class CodeGenerator:
             
         return inner_code
                            
+    def division(self, var1, var2, prefix):
+        inner_code = []
+        
+        if not self.symbols.is_declared(1):
+            inner_code.append("SET 1")
+            self.symbols.add_const(1)
+            inner_code.append(f"STORE {self.symbols.get_const(1)}")
+        
+        
+        inner_code += self.load(var1, prefix)
+        inner_code.append("STORE 3")
+        # inner_code.append("JZERO ") #TODO
+        inner_code.append("JPOS 6")
+        inner_code.append("SUB 3") #flip the sign
+        inner_code.append("SUB 3")
+        inner_code.append("STORE 3")
+        inner_code.append("SET 1")
+        inner_code.append("STORE 7") #flag if product is positive or negative
+        
+        
+        inner_code += self.load(var2, prefix)
+        inner_code.append("STORE 4")
+        inner_code.append("STORE 6")
+        # inner_code.append("JZERO ") #TODO
+        inner_code.append("JPOS 9")
+        inner_code.append("SUB 4")
+        inner_code.append("SUB 4")
+        inner_code.append("STORE 4")
+        inner_code.append("STORE 6") #keeps original divisor for future reference
+        inner_code.append(f"LOAD {self.symbols.get_const(1)}") #SET 1
+        inner_code.append("STORE 8") #flag if divisor is negative
+        inner_code.append("SUB 7")
+        inner_code.append("STORE 7")
+        
+        
+        inner_code.append("SET 0")
+        inner_code.append("STORE 5")
+        
+        
+        inner_code.append("LOAD 4")
+        inner_code.append("ADD 0")
+        inner_code.append("STORE 4")
+        inner_code.append("SUB 3")
+        inner_code.append("JNEG -4")
+        inner_code.append("JZERO 4")
+        inner_code.append("LOAD 4")
+        inner_code.append("HALF")
+        inner_code.append("STORE 4")
+        
+        inner_code.append("LOAD 3")
+        inner_code.append("SUB 4")
+        inner_code.append("JNEG 5")
+        inner_code.append("STORE 3")
+        inner_code.append("LOAD 5")
+        inner_code.append(f"ADD {self.symbols.get_const(1)}")
+        inner_code.append("STORE 5")
+        inner_code.append("LOAD 4")
+        inner_code.append("HALF")
+        inner_code.append("STORE 4")
+        inner_code.append("SUB 6")
+        inner_code.append("JNEG 5")
+        inner_code.append("LOAD 5")
+        inner_code.append("ADD 0")
+        inner_code.append("STORE 5")
+        inner_code.append("JUMP -15")
+        
+        inner_code.append("LOAD 7") #if a*b<0
+        inner_code.append("JZERO 10")
+        inner_code.append("LOAD 5") #flip the sign of the result
+        inner_code.append("SUB 5")
+        inner_code.append("SUB 5")
+        inner_code.append("STORE 5")
+        inner_code.append("LOAD 3") #if a%b=0
+        inner_code.append("JZERO 4")
+        inner_code.append("LOAD 5")
+        inner_code.append(f"SUB {self.symbols.get_const(1)}")
+        inner_code.append("STORE 5")
+        
+        inner_code.append("LOAD 8")
+        inner_code.append("JZERO 5")
+        inner_code.append("LOAD 3")
+        inner_code.append("SUB 3")
+        inner_code.append("SUB 3")
+        inner_code.append("STORE 3")
+        
+         
+        
+        return inner_code

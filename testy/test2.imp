@@ -1,8 +1,8 @@
 PROGRAM IS
     n, m
 BEGIN
-    n := -30;
-    m := -7;
-    n := n * m;
+    n := 150;
+    m := -20;
+    n := n % m;
     WRITE n;
 END
