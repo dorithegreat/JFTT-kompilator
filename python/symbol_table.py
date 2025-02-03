@@ -235,7 +235,7 @@ class SymbolTable(dict):
         if name in self and isinstance(self.get(name), Variable):
             self.get(name).initialized = True
         else:
-            raise Exception("no variable with such name")
+            raise Exception(f"no variable with such name: {name}")
         
 if __name__ == "__main__":
     s = SymbolTable()

@@ -11,8 +11,11 @@ BEGIN
 	ENDFOR
         j:=tc[n];
         WHILE j<=tc[0] DO
+		#WRITE ta[j];
+		#WRITE tb[j];
 		tc[j]:=ta[j]*tb[j];
-                j:=j+1;
+		WRITE tc[j];
+        j:=j+1;
 	ENDWHILE
         FOR i FROM 0 TO n DO
 		WRITE tc[i];

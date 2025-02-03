@@ -1,5 +1,6 @@
 from symbol_table import SymbolTable, Array, ArrayReference
 from postprocessor import Postprocessor
+from preprocessor import Preprocessor
 import nodes as nd
 
 class CodeGenerator:
@@ -12,10 +13,37 @@ class CodeGenerator:
         
     
     def generate(self):
+        preprocessor = Preprocessor()
+        self.consts, self.procedures = preprocessor.preprocess(self.tree)
+        
+        
+        for const in self.consts:
+            self.symbols.add_const(const)
+            self.code.append(f"SET {const}")
+            self.code.append(f"STORE {self.symbols.get_const(const)}")
+            
+            
+        div_code = []
+        if "0_DIV" in self.procedures or "0_MOD" in self.procedures:
+            div_code = self.division()
+            self.symbols.add_procedure("0_DIV", len(self.code) + 1)
+        mul_code = []
+        if "0_MUL" in self.procedures:
+            mul_code = self.multiplication()
+            self.symbols.add_procedure("0_MUL", len(self.code) + len(div_code) + 1)
+            
+            
+        self.offset = len(self.code) + len(div_code) + len(mul_code)
+        
+        code_procedures = []
         code_procedures = self.generate_procedures(self.tree.procedures)
         
+
         # initially skip all procedures and jump straight to main
-        self.code.append(f"JUMP {len(code_procedures) + 1}")
+        if len(code_procedures) + len(div_code) + len(mul_code)> 0:
+            self.code.append(f"JUMP {len(code_procedures) + len(div_code) + len(mul_code) + 1}")
+        self.code += div_code
+        self.code += mul_code
         self.code += code_procedures
         
         # for backwards compatiility with an earlier version of this project some functions track the amount of lines they've added as linenum
@@ -30,12 +58,12 @@ class CodeGenerator:
     
     def generate_procedures(self, procedures : nd.Procedures):
         inner_code = []
-        offset = 1
+        offset = self.offset + 1
         
         for proc in procedures.procedures:
             self.symbols.add_procedure(proc.proc_head.pid, offset)
             inner_code += self.generate_procedure(proc)
-            offset = len(inner_code) + 1
+            offset = self.offset +  len(inner_code) + 1
         return inner_code
             
     
@@ -117,7 +145,6 @@ class CodeGenerator:
                 inner_code += c
                 linenum += l
             elif type(comm) == nd.ProcCall:
-                # TODO only allow calling procedures defined earlier
                                 
                 parameters : list = self.symbols.get_proc_arg(comm.pid)
                 procedure_prefix = comm.pid + "_"
@@ -152,15 +179,6 @@ class CodeGenerator:
                     inner_code.append(f"JUMP {comm.pid}")
                 
             elif type(comm) == nd.Read:
-                # you cannot read a constant so there's need for the same conditions as in WRITE
-                # TODO implement reading a reference variable
-                # if isinstance(comm.variable, nd.ArrayPosition):
-                #     inner_code.append(f"GET {self.symbols.get_array_position(prefix + comm.variable.name, comm.variable.position)}")
-                #     linenum += 1
-                # else:
-                #     inner_code.append(f"GET {self.symbols.get_variable(prefix + comm.variable.name)}")
-                #     linenum += 1
-                #     self.symbols.mark_as_initialized(comm.variable.name)
                 inner_code.append("GET 0")
                 inner_code += self.store(comm.variable, prefix)
                 linenum = len(inner_code)
@@ -232,7 +250,7 @@ class CodeGenerator:
         inner_code = []
         
         lines_comm, code_comm = self.generate_commands(repeat.commands, prefix)
-        lines_cond, code_cond = self.generate_condition(repeat.condition, 0 - lines_comm, False, prefix)
+        lines_cond, code_cond = self.generate_condition(repeat.condition, 0 - lines_comm - 2, False, prefix)
         
         lines_comm = len(code_comm)
         lines_cond = len(code_cond)
@@ -251,7 +269,7 @@ class CodeGenerator:
         linenum = 0 
         
         if not self.symbols.is_declared(1):
-            inner_code.append("SET 1")
+            inner_code.append(f"LOAD {self.symbols.get_const(1)}")
             self.symbols.add_const(1)
             inner_code.append(f"STORE {self.symbols.get_const(1)}")
             linenum += 2
@@ -342,73 +360,52 @@ class CodeGenerator:
                 inner_code.append(f"ADD 0")
 
             elif expression.value1 == 0 or expression.value2 == 0:
-                inner_code.append("SET 0")
+                inner_code.append(f"LOAD {self.symbols.get_const(0)}")
 
             elif expression.value1 == 1:
                 inner_code += self.load(expression.value2)
             elif expression.value2 == 1:
                 inner_code += self.load(expression.value1)
                 
+            elif expression.value1 == -1:
+                inner_code += self.load(expression.value2)
+                inner_code.append("STORE 1")
+                inner_code.append("SUB 1")
+                inner_code.append("SUB 1")
+                
+            elif expression.value2 == -1:
+                inner_code += self.load(expression.value1)
+                inner_code.append("STORE 1")
+                inner_code.append("SUB 1")
+                inner_code.append("SUB 1")
+                
             # TODO this is the place for all multiplication optimizations
             
             else:
                 #* really lengthy but necessary for handling negative numbers
                 #* optimisation: check in preprocessing if this handling is needed at all
-                inner_code.append("SET 0")
-                inner_code.append("STORE 5")
-                inner_code.append("STORE 6") #sign flag
+
                 
                 inner_code += self.load(expression.value1, prefix)
                 inner_code.append("STORE 3")
-                inner_code.append("JPOS 6")
-                inner_code.append("SUB 3")
-                inner_code.append("SUB 3")
-                inner_code.append("STORE 3")
-                inner_code.append("SET 1") #negative flag
-                inner_code.append("STORE 6")
-                
-                inner_code += self.load(expression.value2, prefix)
-                inner_code.append("STORE 4")
-                inner_code.append("JPOS 7")
-                inner_code.append("SUB 4") #flip the sign
-                inner_code.append("SUB 4")
-                inner_code.append("STORE 4")
-                inner_code.append("SET 1") #if flag was 0 it will be 1, if it was 1 it will be 0
-                inner_code.append("SUB 6")
-                inner_code.append("STORE 6")
-                
-                inner_code.append("LOAD 3")
-                inner_code.append("HALF")
-                inner_code.append("ADD 0")
-                inner_code.append("SUB 3")
-                inner_code.append("JZERO 3")
-                inner_code.append("LOAD 4")
-                inner_code.append("STORE 5")
-                
-                inner_code.append("LOAD 4")                
-                inner_code.append("ADD 0")
-                inner_code.append("STORE 4")
-                inner_code.append("LOAD 3")
-                inner_code.append("HALF")
-                inner_code.append("JZERO 10")
-                inner_code.append("STORE 3")
-                inner_code.append("HALF")
-                inner_code.append("ADD 0")
-                inner_code.append("SUB 3")
-                inner_code.append("JZERO -10")
-                inner_code.append("LOAD 4")
-                inner_code.append("ADD 5")
-                inner_code.append("STORE 5")
-                inner_code.append("JUMP -14")
 
-                inner_code.append("LOAD 6")
-                inner_code.append("JZERO 5")
+                
+                return_code = self.load(expression.value2, prefix)
+
+                inner_code.append(f"JZERO {8 + len(return_code)}")
+                inner_code += return_code
+                               
+                inner_code.append("STORE 4")
+                inner_code.append("JZERO 6")
+                
+                
+                inner_code.append("SET ret")
+                inner_code.append("STORE 9")
+                inner_code.append("JUMP 0_MUL")                
                 inner_code.append("LOAD 5")
-                inner_code.append("SUB 5")
-                inner_code.append("SUB 5")
                 inner_code.append("JUMP 2")
                 
-                inner_code.append("LOAD 5")
+                inner_code.append(f"LOAD {self.symbols.get_const(0)}")
                 
             return len(inner_code), inner_code
             
@@ -419,10 +416,17 @@ class CodeGenerator:
                 inner_code += self.load(expression.value1, prefix)
                 inner_code.append("HALF")
             elif expression.value1 == 0 or expression.value2 == 0:
-                inner_code.append("SET 0")
+                inner_code.append(f"LOAD {self.symbols.get_const(0)}")
 
             else:
-                inner_code += self.division(expression.value1, expression.value2, prefix)
+                inner_code += self.load(expression.value1, prefix)
+                inner_code.append("STORE 3")
+                inner_code += self.load(expression.value2, prefix)
+                inner_code.append("STORE 4")
+                
+                inner_code.append("SET ret")
+                inner_code.append("STORE 9")
+                inner_code.append("JUMP 0_DIV")
                 
                 inner_code.append("LOAD 5")
             
@@ -430,11 +434,20 @@ class CodeGenerator:
         
         elif expression.operator == "MOD":
             if expression.value1 == 0 or expression.value2 == 0:
-                inner_code.append("SET 0")
+                inner_code.append(f"LOAD {self.symbols.get_const(0)}")
             
             else:
-                inner_code += self.division(expression.value1, expression.value2, prefix)
+                inner_code += self.load(expression.value1, prefix)
+                inner_code.append("STORE 3")
+                inner_code += self.load(expression.value2, prefix)
+                inner_code.append("STORE 4")
+                
+                inner_code.append("SET ret")
+                inner_code.append("STORE 9")
+                inner_code.append("JUMP 0_DIV")
+                
                 inner_code.append("LOAD 3")
+                
             return len(inner_code), inner_code
         
     def generate_condition(self, condition : nd.Condition, jump, mode : bool, prefix):
@@ -444,9 +457,6 @@ class CodeGenerator:
         
         # TODO optimize for already known conditions like 1 = 2
         
-        # TODO make it work with arrays, variables and constants
-        
-        # TODO rewrite so the jumps are correct (not always to true)
         
         
         inner_code += self.load_and_do_something(condition.value1, condition.value2, "SUB", prefix)
@@ -618,6 +628,8 @@ class CodeGenerator:
             inner_code.append("STORE 2")
             inner_code.append("LOAD 1")
             inner_code.append(f"{something} 2")
+            
+        else:
 
             if self.symbols.is_declared(var2):
                 inner_code.append(f"{something} {self.symbols.get_const(var2)}")
@@ -671,40 +683,42 @@ class CodeGenerator:
             if self.symbols.is_reference(prefix + var.name):
                 inner_code.append(f"STOREI {self.symbols.get_variable(prefix + var.name)}")
             elif self.symbols.is_iterator(prefix + var.name):
-                raise Exception("Attempting to modify iterator")
+                raise Exception(f"Attempting to modify iterator {prefix + var.name}")
             else:
                 inner_code.append(f"STORE {self.symbols.get_variable(prefix + var.name)}")
                 self.symbols.mark_as_initialized(prefix + var.name)
             
         return inner_code
                            
-    def division(self, var1, var2, prefix):
+    def division(self):
         inner_code = []
         
         if not self.symbols.is_declared(1):
-            inner_code.append("SET 1")
+            inner_code.append(f"LOAD {self.symbols.get_const(1)}")
             self.symbols.add_const(1)
             inner_code.append(f"STORE {self.symbols.get_const(1)}")
         
         
-        inner_code.append("SET 0")
+        inner_code.append(f"LOAD {self.symbols.get_const(0)}")
         inner_code.append("STORE 5")
         inner_code.append("STORE 7")
         inner_code.append("STORE 8")
         
-        inner_code += self.load(var1, prefix)
-        inner_code.append("STORE 3")
-        inner_code.append("JZERO 63") #TODO
+        # inner_code += self.load(var1, prefix)
+        # inner_code.append("STORE 3")
+        inner_code.append("LOAD 3")
+        inner_code.append("JZERO 62") #TODO
         inner_code.append("JPOS 6")
         inner_code.append("SUB 3") #flip the sign
         inner_code.append("SUB 3")
         inner_code.append("STORE 3")
-        inner_code.append("SET 1")
+        inner_code.append(f"LOAD {self.symbols.get_const(1)}")
         inner_code.append("STORE 7") #flag if product is positive or negative
         
         
-        inner_code += self.load(var2, prefix)
-        inner_code.append("STORE 4")
+        # inner_code += self.load(var2, prefix)
+        # inner_code.append("STORE 4")
+        inner_code.append("LOAD 4")
         inner_code.append("STORE 6")
         inner_code.append("JZERO 53") #TODO
         inner_code.append("JPOS 9")
@@ -767,10 +781,69 @@ class CodeGenerator:
         
         inner_code.append("JUMP 4")
         
-        inner_code.append("SET 0")
+        inner_code.append(f"LOAD {self.symbols.get_const(0)}")
         inner_code.append("STORE 3")
         inner_code.append("STORE 5")
         
-         
+        inner_code.append("RTRN 9")
+        
+        return inner_code
+    
+    def multiplication(self):
+        inner_code = []
+        
+        inner_code.append(f"LOAD {self.symbols.get_const(0)}")
+        inner_code.append("STORE 5")
+        inner_code.append("STORE 6") #sign flag
+        
+        inner_code.append("LOAD 3")
+        inner_code.append("JPOS 6")
+        inner_code.append("SUB 3")
+        inner_code.append("SUB 3")
+        inner_code.append("STORE 3")
+        inner_code.append(f"LOAD {self.symbols.get_const(1)}") #negative flag
+        inner_code.append("STORE 6")
+        
+        inner_code.append("LOAD 4")
+        inner_code.append("JPOS 7")
+        inner_code.append("SUB 4") #flip the sign
+        inner_code.append("SUB 4")
+        inner_code.append("STORE 4")
+        inner_code.append(f"LOAD {self.symbols.get_const(1)}") #if flag was 0 it will be 1, if it was 1 it will be 0
+        inner_code.append("SUB 6")
+        inner_code.append("STORE 6")
+        
+        inner_code.append("LOAD 3")
+        inner_code.append("HALF")
+        inner_code.append("ADD 0")
+        inner_code.append("SUB 3")
+        inner_code.append("JZERO 3")
+        inner_code.append("LOAD 4")
+        inner_code.append("STORE 5")
+        
+        inner_code.append("LOAD 4")                
+        inner_code.append("ADD 0")
+        inner_code.append("STORE 4")
+        inner_code.append("LOAD 3")
+        inner_code.append("HALF")
+        inner_code.append("JZERO 10")
+        inner_code.append("STORE 3")
+        inner_code.append("HALF")
+        inner_code.append("ADD 0")
+        inner_code.append("SUB 3")
+        inner_code.append("JZERO -10")
+        inner_code.append("LOAD 4")
+        inner_code.append("ADD 5")
+        inner_code.append("STORE 5")
+        inner_code.append("JUMP -14")
+
+        inner_code.append("LOAD 6")
+        inner_code.append("JZERO 5")
+        inner_code.append("LOAD 5")
+        inner_code.append("SUB 5")
+        inner_code.append("SUB 5")
+        inner_code.append("JUMP 2")
+        
+        inner_code.append("RTRN 9")
         
         return inner_code

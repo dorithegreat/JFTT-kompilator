@@ -1,6 +1,8 @@
 import ply.yacc as yacc
 import ply.lex as lex
 
+import sys
+
 import nodes as nd
 from code_generator import CodeGenerator
 
@@ -374,17 +376,11 @@ log = logging.getLogger()
 lex.lex(debug=True,debuglog=log)
 parser = yacc.yacc(debug=True,debuglog=log)
 
-f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/example1.imp", "r")
+f = open(sys.argv[1], "r")
+# f = open("/home/dorithegreat/Documents/programs/semestr_5/kompilator/JFTT-kompilator/testy/exampleA.imp", "r")
 text = f.read()
 
-# text = '''
-# PROGRAM IS
-# 	t[0:5]
-# BEGIN
-#     READ t[0];
-#     WRITE t[0];
-# END
-# '''
+
 tree = parser.parse(text, debug=log)
 
 if tree is not None:

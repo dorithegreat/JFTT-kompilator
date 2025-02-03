@@ -80,7 +80,7 @@ class Identifier:
         self.name = name
 
 class IfStatement:
-    def __init__(self, condition, commands, else_commands):
+    def __init__(self, condition : Condition, commands : Commands, else_commands : Commands):
         self.condition = condition
         self.commands = commands
         # else commands are None if there is no else
@@ -119,8 +119,8 @@ class Procedures:
 
 class Program:
     def __init__(self, procedures, main):
-        self.procedures = procedures
-        self.main = main
+        self.procedures : Procedures = procedures
+        self.main : Main = main
 
 class Read:
     def __init__(self, variable : Identifier):
